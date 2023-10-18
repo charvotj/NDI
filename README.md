@@ -1,0 +1,2 @@
+# NDI
+AAU semestral project
