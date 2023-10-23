@@ -48,24 +48,36 @@ end SPI;
 
 architecture Behavioral of SPI is
 
+    component edge_detector
+    port (
+        sig_in     : in    std_logic;
+        clk        : in    std_logic;
+        edge_r_out : out   std_logic;
+        edge_f_out : out   std_logic
+        );
+    end component;
+
+
+    component ser is
+    Generic(
+        g_DATA_SIZE : natural := 8
+    );
+    Port ( data : in  STD_LOGIC_VECTOR (g_DATA_SIZE-1 downto 0);
+            load_en : in  STD_LOGIC;
+            shift_en : in  STD_LOGIC;
+            rst : in  STD_LOGIC;
+            clk : in  STD_LOGIC;
+            stream : out  STD_LOGIC);
+    end component;
+        
     signal CS_b_edge_r_out  : std_logic;
     signal CS_b_edge_f_out  : std_logic;
     signal SCLK_edge_r_out  : std_logic;
     signal SCLK_edge_f_out  : std_logic;
+        
 begin
 
-    component edge_detector
-    port (
-      sig_in     : in    std_logic;
-      clk        : in    std_logic;
-      edge_r_out : out   std_logic;
-      edge_f_out : out   std_logic
-    );
-  end component;
-
-
-
-  CS_b : component edge_detector
+  CS_b_ed : edge_detector 
     port map (
       sig_in     => CS_b,
       clk        => clk,
@@ -73,7 +85,7 @@ begin
       edge_f_out => CS_b_edge_f_out
     );
 
-  SCLK : component edge_detector
+  SCLK_ed : edge_detector
   port map (
           sig_in     => SCLK,
           clk        => clk,
@@ -81,6 +93,18 @@ begin
           edge_f_out => SCLK_edge_f_out
       );
 
+  Serializer : ser 
+    generic map (
+        g_DATA_SIZE => g_DATA_SIZE
+    )	
+    port map (
+        data => data,
+        load_en => load_en,
+        shift_en => shift_en,
+        rst => rst,
+        clk => clk,
+        stream => stream
+    );
 
 
 end Behavioral;
