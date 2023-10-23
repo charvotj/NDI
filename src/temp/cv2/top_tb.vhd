@@ -27,7 +27,7 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
+USE std.env.finish;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
@@ -96,7 +96,7 @@ BEGIN
 		shift_en <='0';
 		 
 		
-		wait;
+		finish;
    end process;
 
 END;

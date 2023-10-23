@@ -32,12 +32,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity edge_and_explorer_detector is
     Port ( sig_in : in  STD_LOGIC;
            clk : in  STD_LOGIC;
-           sig_out : out  STD_LOGIC);
+           edge_r_out : out  STD_LOGIC;
+		   edge_f_out : out  STD_LOGIC);
 end edge_and_explorer_detector;
 
 architecture Behavioral of edge_and_explorer_detector is
 
-	signal Q_out, XOR_out : STD_LOGIC;
+	signal reg_s : STD_LOGIC; -- vystup z registru
 	
 begin
 
@@ -45,13 +46,15 @@ begin
 process(clk) 
 begin
 	if(rising_edge(clk)) then
-		Q_out <= sig_in;
+		reg_s <= sig_in;
 	end if;
 end process;
 
 -- kombinacni cast
-XOR_out <= Q_out xor sig_in;
-sig_out <= XOR_out and not sig_in;
+-- rising edge
+edge_r_out <= (reg_s xor sig_in) and sig_in; 
+--falling edge
+edge_f_out <= (reg_s xor sig_in) and not sig_in; 
 
 
 
