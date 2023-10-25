@@ -177,5 +177,14 @@ begin
             clk => clk,
             out_ddf => MISO
         );
+
+        
+    ------------------------------
+    ---------- LOGIC -----------
+    ------------------------------
+ser_shift_en <= SCLK_edge_f_out and not CS_b;
+deser_shift_en <= SCLK_edge_r_out and not CS_b;
+
+
 end Behavioral;
 
