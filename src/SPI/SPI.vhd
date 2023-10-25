@@ -106,7 +106,7 @@ begin
 
   Serializer : ser 
     generic map (
-        g_DATA_SIZE => g_DATA_SIZE
+       g_DATA_SIZE => g_DATA_SIZE
     )	
     port map (
         data => data_in,
@@ -120,7 +120,7 @@ begin
 
     Deserializer : deser 
     generic map (
-        g_DATA_SIZE => g_DATA_SIZE
+       g_DATA_SIZE => g_DATA_SIZE
     )	
     port map (
         data => data_out,

@@ -4,11 +4,13 @@ use std.env.finish;
 USE ieee.numeric_std.ALL;
  
 ENTITY SPI_tb IS
+Generic(
+   g_DATA_SIZE : natural := 8 --<<<<<<<<<<<<<---------------------------------------------------------------------
+   );
 END SPI_tb;
  
 ARCHITECTURE behavior OF SPI_tb IS 
 
-   constant c_BIT_SIZE : natural := 9;
  
     -- Component Declaration for the Unit Under Test (UUT)
  
@@ -22,11 +24,11 @@ ARCHITECTURE behavior OF SPI_tb IS
          SCLK : IN  std_logic;
          MOSI : IN  std_logic;
          load_data : IN  std_logic;
-         data_in : IN  std_logic_vector(7 downto 0);
+         data_in : IN  std_logic_vector(g_DATA_SIZE-1 downto 0);
          MISO : OUT  std_logic;
          fr_start : OUT  std_logic;
          fr_end : OUT  std_logic;
-         data_out : OUT  std_logic_vector(7 downto 0)
+         data_out : OUT  std_logic_vector(g_DATA_SIZE-1 downto 0)
         );
     END COMPONENT;
     
@@ -37,13 +39,13 @@ ARCHITECTURE behavior OF SPI_tb IS
    signal SCLK : std_logic := '0';
    signal MOSI : std_logic := '0';
    signal load_data : std_logic := '0';
-   signal data_in : std_logic_vector(7 downto 0) := (others => '0');
+   signal data_in : std_logic_vector(g_DATA_SIZE-1 downto 0) := (others => '0');
 
  	--Outputs
    signal MISO : std_logic;
    signal fr_start : std_logic;
    signal fr_end : std_logic;
-   signal data_out : std_logic_vector(7 downto 0);
+   signal data_out : std_logic_vector(g_DATA_SIZE-1 downto 0);
 
    -- Clock period definitions
    constant clk_period : time := 10 ns;
@@ -53,11 +55,11 @@ ARCHITECTURE behavior OF SPI_tb IS
    -- THX GPT
    procedure send_serial(signal clk : in std_logic;
                          signal serial_out : out std_logic;
-                         data : in std_logic_vector(c_BIT_SIZE-1 downto 0);
+                         data : in std_logic_vector(g_DATA_SIZE-1 downto 0);
                          r_edge : in std_logic) -- '1': rising edge, '0': falling edge
                          is
    begin
-       for i in 0 to c_BIT_SIZE-1 loop
+       for i in 0 to g_DATA_SIZE-1 loop
             if (r_edge = '1') then
                wait until rising_edge(clk);
             else
@@ -73,7 +75,7 @@ BEGIN
 	-- Instantiate the Unit Under Test (UUT)
    uut: SPI 
       generic map (
-        g_DATA_SIZE => c_BIT_SIZE
+        g_DATA_SIZE => g_DATA_SIZE
         )	
       PORT MAP (
           clk => clk,
@@ -111,12 +113,24 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
       wait for clk_period*10;
-      send_serial(SCLK, MOSI, "011001011",'1');
-      wait for 100 ns;	
+      send_serial(SCLK, MOSI, "01110001",'1');
+      wait for clk_period*10;
+      CS_b <= '1';
+      send_serial(SCLK, MOSI, "01110001",'1'); -- nema se posilat
+
+      wait for clk_period*10;
+
       
+      load_data<='1';
+      wait for clk_period*20;
+      load_data<='0';
+      CS_b <= '0';
+      
+      wait for clk_period*100;
+
       -- insert stimulus here 
       finish;
       wait;
    end process;
-
+   data_in <= data_out;
 END;

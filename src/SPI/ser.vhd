@@ -69,7 +69,7 @@ begin
 	end if;
 end process;
 
-stream <= reg_q(g_DATA_SIZE-1); -- LSB/MSB invert - reg_q(0);
+stream <= reg_q(0); -- LSB/MSB invert - reg_q(0);
 --LSB should be first - so test this out
 end Behavioral;
 
