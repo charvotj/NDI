@@ -98,7 +98,6 @@ architecture Behavioral of SPI is
     signal CS_b_DDF_signal  : std_logic;    
     signal SCLK_DDF_signal  : std_logic;
     signal MOSI_DDF_signal  : std_logic;
-    signal MISO_pre_DDF_signal  : std_logic;
     signal CS_b_edge_r_out  : std_logic;
     signal CS_b_edge_f_out  : std_logic;
     signal SCLK_edge_r_out  : std_logic;
@@ -134,7 +133,7 @@ begin
         shift_en => ser_shift_en ,
         rst => '0',
         clk => clk,
-        stream => MISO_pre_DDF_signal
+        stream => MISO
     );
     
 
@@ -171,12 +170,6 @@ begin
             out_ddf => MOSI_DDF_signal
         );
 
-    MISO_DDF : DDF
-        port map (
-            in_ddf => MISO_pre_DDF_signal,
-            clk => clk,
-            out_ddf => MISO
-        );
 
         
     ------------------------------
