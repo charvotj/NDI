@@ -1,45 +1,21 @@
---------------------------------------------------------------------------------
--- Company: 
--- Engineer:
---
--- Create Date:   15:27:12 10/25/2023
--- Design Name:   
--- Module Name:   Z:/home/jakub/Plocha/NDI/Projekt/src/SPI/SPI_tb.vhd
--- Project Name:  AAU
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: SPI
--- 
--- Dependencies:
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
+use std.env.finish;
+USE ieee.numeric_std.ALL;
  
 ENTITY SPI_tb IS
 END SPI_tb;
  
 ARCHITECTURE behavior OF SPI_tb IS 
+
+   constant c_BIT_SIZE : natural := 9;
  
     -- Component Declaration for the Unit Under Test (UUT)
  
     COMPONENT SPI
+    Generic(
+      g_DATA_SIZE : natural := 8
+      );
     PORT(
          clk : IN  std_logic;
          CS_b : IN  std_logic;
@@ -71,12 +47,35 @@ ARCHITECTURE behavior OF SPI_tb IS
 
    -- Clock period definitions
    constant clk_period : time := 10 ns;
-   constant SCLK_period : time := 10 ns;
+   constant SCLK_period : time := 100 ns;
  
+
+   -- THX GPT
+   procedure send_serial(signal clk : in std_logic;
+                         signal serial_out : out std_logic;
+                         data : in std_logic_vector(c_BIT_SIZE-1 downto 0);
+                         r_edge : in std_logic) -- '1': rising edge, '0': falling edge
+                         is
+   begin
+       for i in 0 to c_BIT_SIZE-1 loop
+            if (r_edge = '1') then
+               wait until rising_edge(clk);
+            else
+               wait until falling_edge(clk);
+            end if;
+           serial_out <= data(i);
+       end loop;
+   end procedure send_serial;
+
+
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: SPI PORT MAP (
+   uut: SPI 
+      generic map (
+        g_DATA_SIZE => c_BIT_SIZE
+        )	
+      PORT MAP (
           clk => clk,
           CS_b => CS_b,
           SCLK => SCLK,
@@ -111,12 +110,12 @@ BEGIN
    stim_proc: process
    begin		
       -- hold reset state for 100 ns.
-      wait for 100 ns;	
-
       wait for clk_period*10;
-
+      send_serial(SCLK, MOSI, "011001011",'1');
+      wait for 100 ns;	
+      
       -- insert stimulus here 
-
+      finish;
       wait;
    end process;
 

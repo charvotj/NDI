@@ -8,7 +8,7 @@ entity FDAC is
     Port ( CS_b : in  STD_LOGIC;
            SCLK : in  STD_LOGIC;
            fr_end : out  STD_LOGIC;
-           fr_start : out  STD_LOGIC
+           fr_start : out  STD_LOGIC;
            fr_error : out  STD_LOGIC);
 end FDAC;
 
