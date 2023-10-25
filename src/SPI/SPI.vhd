@@ -48,6 +48,9 @@ end SPI;
 
 architecture Behavioral of SPI is
 
+    ------------------------------
+    -------- COMPONENTS ----------
+    ------------------------------ 
     component edge_detector
     port (
         sig_in     : in    std_logic;
@@ -69,17 +72,45 @@ architecture Behavioral of SPI is
             clk : in  STD_LOGIC;
             stream : out  STD_LOGIC);
     end component;
-        
+
+    component deser is
+        Generic(
+            g_DATA_SIZE : natural := 8
+        );
+        Port (  data : out  STD_LOGIC_VECTOR (g_DATA_SIZE-1 downto 0);
+                shift_en : in  STD_LOGIC;
+                rst : in  STD_LOGIC;
+                clk : in  STD_LOGIC;
+                stream : in  STD_LOGIC);
+        end component;
+
+    component DDF is
+        port (
+            in_ddf  : in std_logic;
+            clk : in std_logic;
+            out_ddf : out std_logic
+        );
+    end component;
+
+    ------------------------------
+    ---------- SIGNALS -----------
+    ------------------------------
+    signal CS_b_DDF_signal  : std_logic;    
+    signal SCLK_DDF_signal  : std_logic;
+    signal MOSI_DDF_signal  : std_logic;
+    signal MISO_pre_DDF_signal  : std_logic;
     signal CS_b_edge_r_out  : std_logic;
     signal CS_b_edge_f_out  : std_logic;
     signal SCLK_edge_r_out  : std_logic;
     signal SCLK_edge_f_out  : std_logic;
+    signal ser_shift_en     : std_logic;
+    signal deser_shift_en   : std_logic;
         
 begin
 
   CS_b_ed : edge_detector 
     port map (
-      sig_in     => CS_b,
+      sig_in     => CS_b_DDF_signal,
       clk        => clk,
       edge_r_out => CS_b_edge_r_out,
       edge_f_out => CS_b_edge_f_out
@@ -87,7 +118,7 @@ begin
 
   SCLK_ed : edge_detector
   port map (
-          sig_in     => SCLK,
+          sig_in     => SCLK_DDF_signal,
           clk        => clk,
           edge_r_out => SCLK_edge_r_out,
           edge_f_out => SCLK_edge_f_out
@@ -98,14 +129,53 @@ begin
         g_DATA_SIZE => g_DATA_SIZE
     )	
     port map (
-        data => data,
-        load_en => load_en,
-        shift_en => shift_en,
-        rst => rst,
+        data => data_in,
+        load_en => load_data,
+        shift_en => ser_shift_en ,
+        rst => '0',
         clk => clk,
-        stream => stream
+        stream => MISO_pre_DDF_signal
+    );
+    
+
+    Deserializer : deser 
+    generic map (
+        g_DATA_SIZE => g_DATA_SIZE
+    )	
+    port map (
+        data => data_out,
+        shift_en => deser_shift_en,
+        rst => '0',
+        clk => clk,
+        stream => MOSI_DDF_signal
     );
 
+    CS_b_DDF : DDF 
+        port map (
+            in_ddf => CS_b,
+            clk => clk,
+            out_ddf => CS_b_DDF_signal
+        );
 
+    SCLK_DDF : DDF
+        port map (
+            in_ddf => SCLK,
+            clk => clk,
+            out_ddf => SCLK_DDF_signal
+        );
+
+    MOSI_DDF : DDF
+        port map (
+            in_ddf => MOSI,
+            clk => clk,
+            out_ddf => MOSI_DDF_signal
+        );
+
+    MISO_DDF : DDF
+        port map (
+            in_ddf => MISO_pre_DDF_signal,
+            clk => clk,
+            out_ddf => MISO
+        );
 end Behavioral;
 

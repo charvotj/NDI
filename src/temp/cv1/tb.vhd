@@ -87,11 +87,13 @@ begin
   begin
 
     -- hold reset state for 100 ns.
-    wait for 38 ns;
+    wait for clk_period * 7;
+    wait until rising_edge(clk);
     -- wait for clk_period*2.5;
 
     sig_in <= '1';
     wait for clk_period * 2;
+    wait until rising_edge(clk);
     sig_in <= '0';
 
     wait for clk_period * 10;
