@@ -12,27 +12,7 @@ END SPI_tb;
 ARCHITECTURE behavior OF SPI_tb IS 
 
  
-    -- Component Declaration for the Unit Under Test (UUT)
- 
-    COMPONENT SPI
-    Generic(
-      g_DATA_SIZE : natural := 8
-      );
-    PORT(
-         clk : IN  std_logic;
-         CS_b : IN  std_logic;
-         SCLK : IN  std_logic;
-         MOSI : IN  std_logic;
-         load_data : IN  std_logic;
-         data_in : IN  std_logic_vector(g_DATA_SIZE-1 downto 0);
-         MISO : OUT  std_logic;
-         fr_start : OUT  std_logic;
-         fr_end : OUT  std_logic;
-         data_out : OUT  std_logic_vector(g_DATA_SIZE-1 downto 0)
-        );
-    END COMPONENT;
     
-
    --Inputs
    signal clk : std_logic := '0';
    signal CS_b : std_logic := '0';
@@ -73,7 +53,7 @@ ARCHITECTURE behavior OF SPI_tb IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: SPI 
+   uut: entity work.SPI(Behavioral)
       generic map (
         g_DATA_SIZE => g_DATA_SIZE
         )	

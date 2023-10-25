@@ -30,50 +30,6 @@ end SPI;
 architecture Behavioral of SPI is
 
     ------------------------------
-    -------- COMPONENTS ----------
-    ------------------------------ 
-    component edge_detector
-    port (
-        sig_in     : in    std_logic;
-        clk        : in    std_logic;
-        edge_r_out : out   std_logic;
-        edge_f_out : out   std_logic
-        );
-    end component;
-
-
-    component ser is
-    Generic(
-        g_DATA_SIZE : natural := 8
-    );
-    Port ( data : in  STD_LOGIC_VECTOR (g_DATA_SIZE-1 downto 0);
-            load_en : in  STD_LOGIC;
-            shift_en : in  STD_LOGIC;
-            rst : in  STD_LOGIC;
-            clk : in  STD_LOGIC;
-            stream : out  STD_LOGIC);
-    end component;
-
-    component deser is
-        Generic(
-            g_DATA_SIZE : natural := 8
-        );
-        Port (  data : out  STD_LOGIC_VECTOR (g_DATA_SIZE-1 downto 0);
-                shift_en : in  STD_LOGIC;
-                rst : in  STD_LOGIC;
-                clk : in  STD_LOGIC;
-                stream : in  STD_LOGIC);
-        end component;
-
-    component DDF is
-        port (
-            in_ddf  : in std_logic;
-            clk : in std_logic;
-            out_ddf : out std_logic
-        );
-    end component;
-
-    ------------------------------
     ---------- SIGNALS -----------
     ------------------------------
     signal CS_b_DDF_signal  : std_logic;    
@@ -88,7 +44,7 @@ architecture Behavioral of SPI is
         
 begin
 
-  CS_b_ed : edge_detector 
+  CS_b_ed : entity work.edge_detector(Behavioral)
     port map (
       sig_in     => CS_b_DDF_signal,
       clk        => clk,
@@ -96,7 +52,7 @@ begin
       edge_f_out => CS_b_edge_f_out
     );
 
-  SCLK_ed : edge_detector
+  SCLK_ed : entity work.edge_detector(Behavioral)
   port map (
           sig_in     => SCLK_DDF_signal,
           clk        => clk,
@@ -104,7 +60,7 @@ begin
           edge_f_out => SCLK_edge_f_out
       );
 
-  Serializer : ser 
+  Serializer : entity work.ser (Behavioral)
     generic map (
        g_DATA_SIZE => g_DATA_SIZE
     )	
@@ -118,7 +74,7 @@ begin
     );
     
 
-    Deserializer : deser 
+    Deserializer : entity work.deser (Behavioral)
     generic map (
        g_DATA_SIZE => g_DATA_SIZE
     )	
@@ -130,21 +86,21 @@ begin
         stream => MOSI_DDF_signal
     );
 
-    CS_b_DDF : DDF 
+    CS_b_DDF : entity work.DDF (Behavioral)
         port map (
             in_ddf => CS_b,
             clk => clk,
             out_ddf => CS_b_DDF_signal
         );
 
-    SCLK_DDF : DDF
+    SCLK_DDF : entity work.DDF(Behavioral)
         port map (
             in_ddf => SCLK,
             clk => clk,
             out_ddf => SCLK_DDF_signal
         );
 
-    MOSI_DDF : DDF
+    MOSI_DDF : entity work.DDF(Behavioral)
         port map (
             in_ddf => MOSI,
             clk => clk,
