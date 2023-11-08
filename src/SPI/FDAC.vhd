@@ -7,7 +7,8 @@ entity FDAC is
     Generic(
         g_DATA_SIZE : natural := 2
         );
-    Port ( clk      :in STD_LOGIC;
+    Port ( clk      : in STD_LOGIC;
+           CS_b     : in STD_LOGIC;
            CS_b_re  : in  STD_LOGIC;
            CS_b_fe  : in  STD_LOGIC;
            SCLK_re  : in  STD_LOGIC;
@@ -30,7 +31,7 @@ begin
       if rising_edge(clk) then
         if (CS_b_fe = '1') then
             cnt_q <= (others => '0');
-        elsif (SCLK_re = '1' and fr_error_s = '0') then
+        elsif (SCLK_re = '1' and CS_b = '0') then
             cnt_q <= cnt_d;
         end if;
       end if;
@@ -38,7 +39,7 @@ begin
   
     cnt_d <= cnt_q + 1;
     
-    fr_error_s <= '1' when cnt_q = g_DATA_SIZE else '0';
+    fr_error_s <= '1' when cnt_q /= g_DATA_SIZE else '0';
     fr_error <= fr_error_s;
     
 end architecture;

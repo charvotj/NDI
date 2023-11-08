@@ -15,4 +15,4 @@ gtkwave::/Time/Zoom/Zoom_Full
 # Pridani jenom listu 
 #set sig_list [list sig_name_a, register_name\[32:0\], ... ] # note the escaping of the [,] brackets
 #gtkwave::addSignalsFromList $sig_list
-#
+#--script=/home/radek/NDI/script.tcl

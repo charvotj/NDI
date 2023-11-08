@@ -23,6 +23,7 @@ entity SPI is
            MISO : out  STD_LOGIC;
            fr_start : out  STD_LOGIC;
            fr_end : out  STD_LOGIC;
+           fr_error : out  STD_LOGIC;
            data_out : out  STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0)
            );
 end SPI;
@@ -107,13 +108,26 @@ begin
             out_ddf => MOSI_DDF_signal
         );
 
-
+    Frame_check : entity work.FDAC(Behavioral)
+    generic map (
+        g_DATA_SIZE => g_DATA_SIZE
+     )
+     Port map ( 
+            clk      =>  clk,
+            CS_b     => CS_b_DDF_signal,
+            CS_b_re  =>  CS_b_edge_r_out,
+            CS_b_fe  =>  CS_b_edge_f_out,
+            SCLK_re  =>  SCLK_edge_r_out,
+            fr_end   =>  fr_end,
+            fr_start =>  fr_start,
+            fr_error =>  fr_error
+     );       
         
     ------------------------------
     ---------- LOGIC -----------
     ------------------------------
-ser_shift_en <= SCLK_edge_f_out and not CS_b;
-deser_shift_en <= SCLK_edge_r_out and not CS_b;
+ser_shift_en <= SCLK_edge_f_out and not CS_b_DDF_signal;
+deser_shift_en <= SCLK_edge_r_out and not CS_b_DDF_signal;
 
 
 end Behavioral;
