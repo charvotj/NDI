@@ -101,6 +101,14 @@ BEGIN
       wait for SCLK_period*1;
       CS_b <= '1';
 
+      -- delay
+      wait for clk_period*10;
+
+      -- send third frame
+      CS_b <= '0';
+      send_serial(SCLK, MOSI ,5, 15 ,'0');
+      wait for SCLK_period*1;
+      CS_b <= '1';
 
       wait for clk_period*10;
 
