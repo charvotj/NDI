@@ -41,5 +41,8 @@ begin
           fr_error => sig_fr_error,
           data_out => sig_data_in --sig_data_out - original, sig_data_in -loopback
         );
+
+        -- for loopback:
+          sig_load_data <= sig_fr_end;
    
 end architecture;
