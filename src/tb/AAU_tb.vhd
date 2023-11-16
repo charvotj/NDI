@@ -12,7 +12,6 @@ END AAU_tb;
  
 ARCHITECTURE behavior OF AAU_tb IS 
 
- 
     
    --Signals
    signal clk : std_logic := '0';
@@ -50,7 +49,7 @@ BEGIN
 		clk <= '1';
 		wait for clk_period/2;
    end process;
- 
+   --VELKY SPATNY :_C sad
    SCLK_process :process
    begin
 		SPI_bus.SCLK <= '0';
@@ -64,10 +63,6 @@ BEGIN
    stim_proc: process
    variable pckt_in, pckt_out : packet;
    begin		
-   --    SPI_bus.SCLK <= '0';
-   --    wait for clk_period*100;
-   --    SPI_bus.SCLK <= '1';
-   -- -- hold reset state for 100 ns.
    --    SPI_bus.CS_b <= '1';
       wait for clk_period*100;
       finish;
