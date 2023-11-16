@@ -63,13 +63,13 @@ begin
 	if(load_en = '1') then
 		reg_d <= data;
 	elsif(shift_en = '1') then
-		reg_d <= reg_q(g_DATA_SIZE-2 downto 0) & '0';
+		reg_d <= '0' & reg_q(g_DATA_SIZE-1 downto 1) ; -- LSB/MSB - care for shift direction
 	else
 		reg_d <= reg_q;
 	end if;
 end process;
 
-stream <= reg_q(0); -- LSB/MSB invert - reg_q(0);
+stream <= reg_q(0); 
 --LSB should be first - so test this out
 end Behavioral;
 
