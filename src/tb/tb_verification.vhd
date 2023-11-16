@@ -21,6 +21,13 @@ package tb_verification is
         MISO : std_logic   ;
         CS_b   : std_logic ;
     end record;
+    -- Recessive values for resolution function
+    constant c_SPI_bus_Recessive : SPI_bus_t := (
+        SCLK    => 'Z',
+        MOSI    => 'Z',
+        MISO    => 'Z',        
+        CS_b    => 'Z'
+    );
     
     -- PROCEDURES
     -- procedure send_serial(signal clk : in std_logic;
@@ -78,8 +85,15 @@ package body tb_verification is
                          data_out : out std_logic_vector) 
         is
         begin
+            -- report to log
+            report "sending report";
+            report "data_in:";
+            report to_string(unsigned(data_in));
+            report "data_out:";
+            report to_string(unsigned(data_out));
+            -- code
             SPI_bus.CS_b <= '0';
-            for i in 0 to data_in'length-1 loop
+            for i in 0 to (data_in'length-1) loop
                 --posilani  
                 wait until falling_edge(SPI_bus.SCLK);
                 SPI_bus.MOSI <= data_in(i);
@@ -100,7 +114,7 @@ package body tb_verification is
                           delay: in time;
                           bit_size : in natural := c_DATA_SIZE)
             is
-                variable fr1_vec, fr2_vec : std_logic_vector(bit_size-1 to 0);
+                variable fr1_vec, fr2_vec : std_logic_vector(bit_size-1 downto 0) := (others => '0');
             begin
                 send_frame(SPI_bus,nat_to_vec(data_in.firstFrame, bit_size),fr1_vec);
                 wait for delay;

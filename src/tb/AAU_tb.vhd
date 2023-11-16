@@ -15,15 +15,11 @@ ARCHITECTURE behavior OF AAU_tb IS
     
    --Signals
    signal clk : std_logic := '0';
-  
    signal SPI_bus : SPI_bus_t;
-   --SPI_bus.SCLK <= '0';
    
    -- Clock period definitions
    constant clk_period : time := 10 ns;
    constant SCLK_period : time := 100 ns;
-
-
 
 
 BEGIN
@@ -49,73 +45,52 @@ BEGIN
 		clk <= '1';
 		wait for clk_period/2;
    end process;
+
+   
    --VELKY SPATNY :_C sad
    SCLK_process :process
    begin
-		SPI_bus.SCLK <= '0';
-		wait for SCLK_period/2;
-		SPI_bus.SCLK <= '1';
-		wait for SCLK_period/2;
+      SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
+      
+      while true loop
+         SPI_bus.SCLK <= '0';
+         wait for SCLK_period/2;
+         SPI_bus.SCLK <= '1';
+         wait for SCLK_period/2;
+      end loop;
    end process;
- 
+
 
    -- Stimulus process
    stim_proc: process
    variable pckt_in, pckt_out : packet;
    begin		
-   --    SPI_bus.CS_b <= '1';
-      wait for clk_period*100;
-      finish;
+      -- init
+      SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
+      SPI_bus.CS_b <= '1';
+      wait for clk_period*10; -- wait to see falling edge of CS
+      
+
       -- send first packet
       pckt_in.firstFrame := 4;
       pckt_in.secondFrame := 5;
       send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
-
+      
       assert pckt_in = pckt_out
-         report "Loopback is like VHDL... Broken"
-         severity failure;
+         report "Loopback is like VHDL... Broken" severity failure;
       
       -- delay
       wait for clk_period*10;
-
+      
       -- send second frame
       pckt_in.firstFrame := 20;
       pckt_in.secondFrame := 50;
       send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
 
-      -- -- hold reset state for 100 ns.
-      -- CS_b <= '1';
-      -- wait for clk_period*10;
-
-      -- -- send first frame
-      -- CS_b <= '0';
-      -- send_serial(SCLK, MOSI ,5, 15 ,'0');
-      -- wait for SCLK_period*1;
-      -- CS_b <= '1';
-      -- -- delay
-      -- wait for clk_period*10;
-
-      -- -- send second frame
-      -- CS_b <= '0';
-      -- send_serial(SCLK, MOSI ,16, 9595 ,'0');
-      -- wait for SCLK_period*1;
-      -- CS_b <= '1';
-
-      -- -- delay
-      -- wait for clk_period*10;
-
-      -- -- send third frame
-      -- CS_b <= '0';
-      -- send_serial(SCLK, MOSI ,5, 15 ,'0');
-      -- wait for SCLK_period*1;
-      -- CS_b <= '1';
-
-      -- wait for clk_period*10;
-
+      assert pckt_in = pckt_out
+         report "Loopback is like VHDL... Broken" severity failure;
       
-      -- wait for clk_period*100;
-
-      -- insert stimulus here 
+      wait for clk_period*10;
       finish;
       wait;
    end process;
