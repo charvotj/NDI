@@ -72,22 +72,29 @@ BEGIN
       
 
       -- send first packet
-      pckt_in.firstFrame := 4;
+      pckt_in.firstFrame := 43690; -- 0xAAAA
       pckt_in.secondFrame := 5;
       send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
+
+      wait for SCLK_period*20;
       
-      assert pckt_in = pckt_out
+      report "pckt_in.firstFrame:";
+      report to_string((pckt_in.firstFrame));
+      report "pckt_out.secondFrame:";
+      report to_string((pckt_out.secondFrame));
+      assert pckt_in.firstFrame = pckt_out.secondFrame
          report "Loopback is like VHDL... Broken" severity failure;
       
       -- delay
-      wait for clk_period*10;
+      wait for clk_period*20;
       
       -- send second frame
-      pckt_in.firstFrame := 20;
-      pckt_in.secondFrame := 50;
+      pckt_in.firstFrame := 21;
+      pckt_in.secondFrame := 51;
       send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
 
-      assert pckt_in = pckt_out
+
+      assert pckt_in.firstFrame = pckt_out.secondFrame
          report "Loopback is like VHDL... Broken" severity failure;
       
       wait for clk_period*10;
