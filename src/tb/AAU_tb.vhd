@@ -2,10 +2,11 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 use std.env.finish;
 USE ieee.numeric_std.ALL;
+use work.tb_verification.all;
  
 ENTITY AAU_tb IS
 Generic(
-   g_DATA_SIZE : natural := 16 --<<<<<<<<<<<<<---------------------------------------------------------------------
+   g_DATA_SIZE : natural := c_DATA_SIZE --<<<<<<<<<<<<<---------------------------------------------------------------------
    );
 END AAU_tb;
  
@@ -13,38 +14,17 @@ ARCHITECTURE behavior OF AAU_tb IS
 
  
     
-   --Inputs
+   --Signals
    signal clk : std_logic := '0';
-   signal CS_b : std_logic := '0';
-   signal SCLK : std_logic := '0';
-   signal MOSI : std_logic := '0';
-   
- 	--Outputs
-   signal MISO : std_logic;
+  
+   signal SPI_bus : SPI_bus_t;
+   --SPI_bus.SCLK <= '0';
    
    -- Clock period definitions
    constant clk_period : time := 10 ns;
    constant SCLK_period : time := 100 ns;
- 
 
-  
-   procedure send_serial(signal clk : in std_logic;
-                         signal serial_out : out std_logic;
-                         data_len : in natural;
-                         data : in  natural;
-                         r_edge : in std_logic) -- '1': rising edge, '0': falling edge
-                         is
-   variable data_vector : std_logic_vector(data_len-1 downto 0) := std_logic_vector(to_unsigned(data,data_len));
-   begin
-       for i in 0 to data_len-1 loop
-            if (r_edge = '1') then
-               wait until rising_edge(clk);
-            else
-               wait until falling_edge(clk);
-            end if;
-           serial_out <= data_vector(i);
-       end loop;
-   end procedure send_serial;
+
 
 
 BEGIN
@@ -56,10 +36,10 @@ BEGIN
         )	
       PORT MAP (
          clk  => clk,
-         SCLK => SCLK,
-         CS_b => CS_b,
-         MOSI => MOSI,
-         MISO => MISO
+         SCLK => SPI_bus.SCLK,
+         CS_b => SPI_bus.CS_b,
+         MOSI => SPI_bus.MOSI,
+         MISO => SPI_bus.MISO
         );
 
    -- Clock process definitions
@@ -73,47 +53,72 @@ BEGIN
  
    SCLK_process :process
    begin
-		SCLK <= '0';
+		SPI_bus.SCLK <= '0';
 		wait for SCLK_period/2;
-		SCLK <= '1';
+		SPI_bus.SCLK <= '1';
 		wait for SCLK_period/2;
    end process;
  
 
    -- Stimulus process
    stim_proc: process
+   variable pckt_in, pckt_out : packet;
    begin		
-      -- hold reset state for 100 ns.
-      CS_b <= '1';
-      wait for clk_period*10;
+   --    SPI_bus.SCLK <= '0';
+   --    wait for clk_period*100;
+   --    SPI_bus.SCLK <= '1';
+   -- -- hold reset state for 100 ns.
+   --    SPI_bus.CS_b <= '1';
+      wait for clk_period*100;
+      finish;
+      -- send first packet
+      pckt_in.firstFrame := 4;
+      pckt_in.secondFrame := 5;
+      send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
 
-      -- send first frame
-      CS_b <= '0';
-      send_serial(SCLK, MOSI ,5, 15 ,'0');
-      wait for SCLK_period*1;
-      CS_b <= '1';
+      assert pckt_in = pckt_out
+         report "Loopback is like VHDL... Broken"
+         severity failure;
+      
       -- delay
       wait for clk_period*10;
 
       -- send second frame
-      CS_b <= '0';
-      send_serial(SCLK, MOSI ,16, 9595 ,'0');
-      wait for SCLK_period*1;
-      CS_b <= '1';
+      pckt_in.firstFrame := 20;
+      pckt_in.secondFrame := 50;
+      send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
 
-      -- delay
-      wait for clk_period*10;
+      -- -- hold reset state for 100 ns.
+      -- CS_b <= '1';
+      -- wait for clk_period*10;
 
-      -- send third frame
-      CS_b <= '0';
-      send_serial(SCLK, MOSI ,5, 15 ,'0');
-      wait for SCLK_period*1;
-      CS_b <= '1';
+      -- -- send first frame
+      -- CS_b <= '0';
+      -- send_serial(SCLK, MOSI ,5, 15 ,'0');
+      -- wait for SCLK_period*1;
+      -- CS_b <= '1';
+      -- -- delay
+      -- wait for clk_period*10;
 
-      wait for clk_period*10;
+      -- -- send second frame
+      -- CS_b <= '0';
+      -- send_serial(SCLK, MOSI ,16, 9595 ,'0');
+      -- wait for SCLK_period*1;
+      -- CS_b <= '1';
+
+      -- -- delay
+      -- wait for clk_period*10;
+
+      -- -- send third frame
+      -- CS_b <= '0';
+      -- send_serial(SCLK, MOSI ,5, 15 ,'0');
+      -- wait for SCLK_period*1;
+      -- CS_b <= '1';
+
+      -- wait for clk_period*10;
 
       
-      wait for clk_period*100;
+      -- wait for clk_period*100;
 
       -- insert stimulus here 
       finish;

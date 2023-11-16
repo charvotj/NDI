@@ -39,7 +39,7 @@ begin
           fr_start => sig_fr_start,
           fr_end => sig_fr_end,
           fr_error => sig_fr_error,
-          data_out => sig_data_out
+          data_out => sig_data_in --sig_data_out - original, sig_data_in -loopback
         );
    
 end architecture;
