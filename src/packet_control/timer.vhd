@@ -23,7 +23,7 @@ architecture Behavioral of Timer is
     signal cnt_d, cnt_q : unsigned(integer(ceil(log2(real(COUNT_TO_NUMBER)))) downto 0) := (others => '0');
 
 begin
-
+        --TODO Pridat enable
     process(clk, reset)
     begin
         if reset = '1' then

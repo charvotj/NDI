@@ -18,8 +18,9 @@ ARCHITECTURE behavior OF AAU_tb IS
    signal SPI_bus : SPI_bus_t;
    
    -- Clock period definitions
-   constant clk_period : time := 10 ns;
-   constant SCLK_period : time := 100 ns;
+   constant c_CLK_PERIOD_NS : natural := 20;
+   constant clk_period : time := time(c_CLK_PERIOD_NS * 1 ns);
+   constant SCLK_period : time := 20 us;
 
 
 BEGIN
@@ -27,7 +28,8 @@ BEGIN
 	-- Instantiate the Unit Under Test (UUT)
    uut: entity work.AAU(Behavioral)
       generic map (
-        g_DATA_SIZE => g_DATA_SIZE
+        g_DATA_SIZE => g_DATA_SIZE,
+        g_CLK_PERIOD_NS => c_CLK_PERIOD_NS
         )	
       PORT MAP (
          clk  => clk,
@@ -68,13 +70,13 @@ BEGIN
       -- init
       SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
       SPI_bus.CS_b <= '1';
-      wait for clk_period*10; -- wait to see falling edge of CS
+      wait for SCLK_period*4; -- wait to see falling edge of CS
       
 
       -- send first packet
       pckt_in.firstFrame := 43690; -- 0xAAAA
       pckt_in.secondFrame := 5;
-      send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
+      send_packet(SPI_bus,pckt_in,pckt_out, 44 us);
 
       wait for SCLK_period*20;
       
