@@ -73,9 +73,10 @@ begin
         we_data_fr2 <= '0';
         load_data   <= '0';
         timer_reset <= '1';
-        data_out    <= (others => '0');
+        data_out    <= add_res; --ad_res on output of a multiplex
 
         case current_state is
+            -- STATE CHANGE
             when await_fr1 =>
                 if(fr_start = '1') then
                     next_state <= receiving_fr1;
@@ -85,18 +86,18 @@ begin
             when receiving_fr1 =>
                 -- Define transition logic from recieve_fr1
                 --timer_reset <= '1';
-                load_data <= '0'; -- TODO asi takto
                 if(fr_end = '1') then
                     if(fr_error = '0') then
                         next_state <= await_fr2;
                         we_data_fr1 <= '1'; -- propagujeme data dale
-                    else  --error
+                    else  --error💀
                         next_state <= await_fr1;
                     end if;
                 end if;
+            -- STATE CHANGE
             when await_fr2 =>
                 timer_reset <= '0';
-                we_data_fr1 <= '0';
+                --we_data_fr1 <= '0';
                 if(timer_flag = '1') then
                     next_state <= await_fr1; -- REQ_AAU_I_023, Rev. 1
                 elsif(fr_start = '1') then
@@ -104,6 +105,7 @@ begin
                     data_out <= mul_res; -- TODO asi takto
                     load_data <= '1';    -- TODO asi takto
                 end if;
+            -- STATE CHANGE
             when receiving_fr2 =>
                 load_data <= '0'; -- TODO asi takto
                 if(fr_end = '1') then
@@ -112,6 +114,7 @@ begin
                     end if;
                         next_state <= await_fr1;
                 end if;
+            -- STATE CHANGE
             when others =>
                 next_state <= await_fr1;
         end case;
