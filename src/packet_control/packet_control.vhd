@@ -64,18 +64,19 @@ begin
     end process;
 
     -- Next State Logic
-    process(clk,current_state)
+    process(fr_start,fr_end,timer_flag,fr_error,current_state)
     begin
         next_state <= current_state; -- default
         
+        -- initial values
+        we_data_fr1 <= '0';
+        we_data_fr2 <= '0';
+        load_data   <= '0';
+        timer_reset <= '1';
+        data_out    <= (others => '0');
+
         case current_state is
             when await_fr1 =>
-                -- initial values
-                we_data_fr1 <= '0';
-                we_data_fr2 <= '0';
-                load_data   <= '0';
-                timer_reset <= '1';
-
                 if(fr_start = '1') then
                     next_state <= receiving_fr1;
                     data_out <= add_res; -- TODO asi takto
