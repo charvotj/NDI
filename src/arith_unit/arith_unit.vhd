@@ -26,8 +26,8 @@ architecture Behavioral of arith_unit is
     
     signal sig_fr1_reg_q, sig_fr2_reg_q               : STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
     signal sig_mul_res_reg_d, sig_add_res_reg_d       : STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
+    signal sig_add_res                                : STD_LOGIC_VECTOR(g_DATA_SIZE+0 downto 0);
     signal sig_mul_res                                : STD_LOGIC_VECTOR(2*g_DATA_SIZE-1 downto 0);
-    signal sig_add_res                                : STD_LOGIC_VECTOR(g_DATA_SIZE downto 0);
     signal sig_mul_res_reg_en, sig_add_res_reg_en     : std_logic;       
 
 begin
@@ -95,8 +95,13 @@ begin
     sig_add_res <= std_logic_vector(resize(signed(sig_fr1_reg_q), g_DATA_SIZE+1) 
                                   + resize(signed(sig_fr2_reg_q), g_DATA_SIZE+1));
     --multiplier
-    --sig_mul_res <= std_logic_vector(signed(sig_fr1_reg_q) * signed(sig_fr2_reg_q));
-    --sig_mul_res_reg_d <= sig_mul_res(g_DATA_SIZE-1 downto 0);
+    sig_mul_res <= std_logic_vector(signed(sig_fr1_reg_q) * signed(sig_fr2_reg_q));
+    sig_mul_res_reg_d <= sig_mul_res(g_DATA_SIZE-1 downto 0);
+
+
+    -- enable 
+    sig_mul_res_reg_en <= '1'; 
+    sig_add_res_reg_en <= '1'; 
 
     
                   

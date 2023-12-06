@@ -14,8 +14,8 @@ package tb_verification is
     -- TYPES
 
     type packet is record
-        firstFrame : natural;
-        secondFrame : natural;
+        firstFrame : INTEGER;
+        secondFrame : INTEGER;
     end record;
 
     type SPI_bus_t is record
@@ -53,12 +53,12 @@ package tb_verification is
 
     
     -- FUNCTIONS
-    function nat_to_vec (number : in natural;
+    function int_to_vec (number : in integer;
                          length : in natural
     ) return std_logic_vector;
 
-    function vec_to_nat (vector : in std_logic_vector
-    ) return natural;
+    function vec_to_int (vector : in std_logic_vector
+    ) return integer;
     
 
 end tb_verification;
@@ -89,12 +89,12 @@ package body tb_verification is
         is
         begin
             -- report to log
-            report "sending report";
-            report "data_in:";
-            report to_string(unsigned(data_in));
-            report "data_out:";
-            report to_string(unsigned(data_out));
-            -- code
+            -- report "sending report";
+            -- report "data_in:";
+            -- report to_string(unsigned(data_in));
+            -- report "data_out:";
+            -- report to_string(unsigned(data_out));
+            -- -- code
             SPI_bus.CS_b <= '0';
             for i in 0 to (data_in'length-1) loop
                 --posilani  
@@ -103,6 +103,7 @@ package body tb_verification is
                 --cteni
                 wait until rising_edge(SPI_bus.SCLK);
                 data_out(i) := SPI_bus.MISO;
+                report "MISO:" & to_string(SPI_bus.MISO);
 
             end loop;
 
@@ -121,12 +122,12 @@ package body tb_verification is
             begin
                 wait until rising_edge(SPI_bus.SCLK);
                 wait for 0.25 * c_SCLK_PERIOD;
-                send_frame(SPI_bus,nat_to_vec(data_in.firstFrame, bit_size),fr1_vec);
+                send_frame(SPI_bus,int_to_vec(data_in.firstFrame, bit_size),fr1_vec);
                 wait for delay;
-                send_frame(SPI_bus,nat_to_vec(data_in.secondFrame, bit_size), fr2_vec);
+                send_frame(SPI_bus,int_to_vec(data_in.secondFrame, bit_size), fr2_vec);
 
-                data_out.secondFrame := vec_to_nat(fr1_vec);
-                data_out.secondFrame := vec_to_nat(fr2_vec);
+                data_out.firstFrame := vec_to_int(fr1_vec);
+                data_out.secondFrame := vec_to_int(fr2_vec);
 
             end procedure;
 
@@ -134,18 +135,19 @@ package body tb_verification is
     
 
     --Trosku useless, ale nevadí c-: uz se napsala...
-    function nat_to_vec (number : in natural;
+    function int_to_vec (number : in integer;
                         length  : in natural
     ) return std_logic_vector is
     begin
-        return std_logic_vector(to_unsigned(number,length));
+        return std_logic_vector(to_signed(number,length));
     end function;
 
     --Trosku useless, ale nevadí c-: uz se napsala...
-    function vec_to_nat (vector : in std_logic_vector
-    ) return natural is
+    function vec_to_int (vector : in std_logic_vector
+    ) return integer is
     begin
-        return to_integer(unsigned(vector));
+        report "DEBUG: vec_to_int func:" & to_string(unsigned(vector));
+        return to_integer(signed(vector));
     end function;
 
 end tb_verification;

@@ -61,49 +61,44 @@ BEGIN
 
    -- Stimulus process
    stim_proc: process
-   variable pckt_in, pckt_out : packet;
+   variable pckt_in, pckt_out, pckt_zero : packet;
    begin		
       -- init
       SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
       SPI_bus.CS_b <= '1';
       wait for c_SCLK_PERIOD*4; -- wait to see falling edge of CS
       
-
-      -- send first packet
-      pckt_in.firstFrame := 8; -- 0xAAAA
-      pckt_in.secondFrame := 9;
-      send_packet(SPI_bus,pckt_in,pckt_out, 0.75*c_SCLK_PERIOD);
-
-      wait for 2* c_SCLK_PERIOD;
-
-      -- send first packet
-      pckt_in.firstFrame := 6; -- 0xAAAA
-      pckt_in.secondFrame := 8;
-      send_packet(SPI_bus,pckt_in,pckt_out, 1* c_SCLK_PERIOD);
+      pckt_zero.firstFrame := 0;
+      pckt_zero.secondFrame := 0;
       
-      wait for 20* c_SCLK_PERIOD;
-      -- pckt_in.firstFrame := 21;
-      -- pckt_in.secondFrame := 51;
-      -- send_packet(SPI_bus,pckt_in,pckt_out, 80 ns);
-
+      ------------------------------------
+      -------- TEST SEQUENCE BEGIN -------
+      ------------------------------------
+      -- send first packet
+      pckt_in.firstFrame := 3;
+      pckt_in.secondFrame := 3;
+      send_packet(SPI_bus,pckt_in,pckt_out, 0.75*c_SCLK_PERIOD);
+      -- get result
+      wait for 2* c_SCLK_PERIOD;
+      send_packet(SPI_bus,pckt_zero,pckt_out, 0.75*c_SCLK_PERIOD);
+      -- report
       report "pckt_in.firstFrame:";
       report to_string((pckt_in.firstFrame));
+      report "pckt_in.secondFrame:";
+      report to_string((pckt_in.secondFrame));
+      
+      report "pckt_out.firstFrame:";
+      report to_string((pckt_out.firstFrame));
       report "pckt_out.secondFrame:";
       report to_string((pckt_out.secondFrame));
-      assert pckt_in.firstFrame = pckt_out.secondFrame
-         report "Loopback is like VHDL... Broken" severity failure;
-      
-      -- delay
-      wait for c_CLK_PERIOD*20;
-      
-      -- -- send second frame
-      -- pckt_in.firstFrame := 21;
-      -- pckt_in.secondFrame := 51;
-      send_packet(SPI_bus,pckt_in,pckt_out, 80 ns);
 
+      -- assert sumation
+      assert pckt_out.firstFrame = pckt_in.firstFrame + pckt_in.secondFrame -- nerovna se assert
+         report "Results was: " & to_string(pckt_out.firstFrame) & ", Should be: " & to_string(pckt_in.firstFrame + pckt_in.secondFrame) severity failure;
+      -- assert multiplication
+      assert pckt_out.firstFrame = pckt_in.firstFrame * pckt_in.secondFrame -- nerovna se assert
+         report "Results was: " & to_string(pckt_out.firstFrame) & ", Should be: " & to_string(pckt_in.firstFrame * pckt_in.secondFrame) severity failure;
 
-      assert pckt_in.firstFrame = pckt_out.secondFrame
-         report "Loopback is like VHDL... Broken" severity failure;
       
       wait for c_CLK_PERIOD*10;
       finish;
