@@ -17,10 +17,6 @@ ARCHITECTURE behavior OF AAU_tb IS
    signal clk : std_logic := '0';
    signal SPI_bus : SPI_bus_t;
    
-   -- Clock period definitions
-   constant c_CLK_PERIOD_NS : natural := 20;
-   constant clk_period : time := time(c_CLK_PERIOD_NS * 1 ns);
-   constant SCLK_period : time := 20 us;
 
 
 BEGIN
@@ -43,9 +39,9 @@ BEGIN
    clk_process :process
    begin
 		clk <= '0';
-		wait for clk_period/2;
+		wait for c_CLK_PERIOD/2;
 		clk <= '1';
-		wait for clk_period/2;
+		wait for c_CLK_PERIOD/2;
    end process;
 
    
@@ -56,9 +52,9 @@ BEGIN
       
       while true loop
          SPI_bus.SCLK <= '0';
-         wait for SCLK_period/2;
+         wait for c_SCLK_PERIOD/2;
          SPI_bus.SCLK <= '1';
-         wait for SCLK_period/2;
+         wait for c_SCLK_PERIOD/2;
       end loop;
    end process;
 
@@ -70,16 +66,26 @@ BEGIN
       -- init
       SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
       SPI_bus.CS_b <= '1';
-      wait for SCLK_period*4; -- wait to see falling edge of CS
+      wait for c_SCLK_PERIOD*4; -- wait to see falling edge of CS
       
 
       -- send first packet
-      pckt_in.firstFrame := 43690; -- 0xAAAA
-      pckt_in.secondFrame := 5;
-      send_packet(SPI_bus,pckt_in,pckt_out, 44 us);
+      pckt_in.firstFrame := 8; -- 0xAAAA
+      pckt_in.secondFrame := 9;
+      send_packet(SPI_bus,pckt_in,pckt_out, 0.75*c_SCLK_PERIOD);
 
-      wait for SCLK_period*20;
+      wait for 2* c_SCLK_PERIOD;
+
+      -- send first packet
+      pckt_in.firstFrame := 6; -- 0xAAAA
+      pckt_in.secondFrame := 8;
+      send_packet(SPI_bus,pckt_in,pckt_out, 1* c_SCLK_PERIOD);
       
+      wait for 20* c_SCLK_PERIOD;
+      -- pckt_in.firstFrame := 21;
+      -- pckt_in.secondFrame := 51;
+      -- send_packet(SPI_bus,pckt_in,pckt_out, 80 ns);
+
       report "pckt_in.firstFrame:";
       report to_string((pckt_in.firstFrame));
       report "pckt_out.secondFrame:";
@@ -88,18 +94,18 @@ BEGIN
          report "Loopback is like VHDL... Broken" severity failure;
       
       -- delay
-      wait for clk_period*20;
+      wait for c_CLK_PERIOD*20;
       
-      -- send second frame
-      pckt_in.firstFrame := 21;
-      pckt_in.secondFrame := 51;
-      send_packet(SPI_bus,pckt_in,pckt_out, 100 ns);
+      -- -- send second frame
+      -- pckt_in.firstFrame := 21;
+      -- pckt_in.secondFrame := 51;
+      send_packet(SPI_bus,pckt_in,pckt_out, 80 ns);
 
 
       assert pckt_in.firstFrame = pckt_out.secondFrame
          report "Loopback is like VHDL... Broken" severity failure;
       
-      wait for clk_period*10;
+      wait for c_CLK_PERIOD*10;
       finish;
       wait;
    end process;

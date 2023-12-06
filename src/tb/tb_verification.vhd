@@ -6,7 +6,10 @@ USE ieee.numeric_std.ALL;
 
 package tb_verification is
     -- CONSTANTS
-    constant c_DATA_SIZE : natural := 16;
+    constant c_DATA_SIZE : natural := 4;
+    constant c_CLK_PERIOD_NS : natural := 20;
+    constant c_CLK_PERIOD : time := time(c_CLK_PERIOD_NS * 1 ns);
+    constant c_SCLK_PERIOD : time := 20 us;
 
     -- TYPES
 
@@ -116,6 +119,8 @@ package body tb_verification is
             is
                 variable fr1_vec, fr2_vec : std_logic_vector(bit_size-1 downto 0) := (others => '0');
             begin
+                wait until rising_edge(SPI_bus.SCLK);
+                wait for 0.25 * c_SCLK_PERIOD;
                 send_frame(SPI_bus,nat_to_vec(data_in.firstFrame, bit_size),fr1_vec);
                 wait for delay;
                 send_frame(SPI_bus,nat_to_vec(data_in.secondFrame, bit_size), fr2_vec);

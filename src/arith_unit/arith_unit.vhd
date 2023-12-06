@@ -21,10 +21,14 @@ architecture Behavioral of arith_unit is
     ------------------------------
     ---------- SIGNALS -----------
     ------------------------------
+    constant c_MAX_VAL : STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0) := '0' & (g_DATA_SIZE-2 downto 0 => '1');
+    constant c_MIN_VAL : STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0) := '1' & (g_DATA_SIZE-2 downto 0 => '0');
+    
     signal sig_fr1_reg_q, sig_fr2_reg_q               : STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
     signal sig_mul_res_reg_d, sig_add_res_reg_d       : STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
-    signal sig_mul_res, sig_add_res                   : STD_LOGIC_VECTOR(2*g_DATA_SIZE-1 downto 0);
-    signal sig_mul_res_reg_en, sig_add_res_reg_en     : std_logic;
+    signal sig_mul_res                                : STD_LOGIC_VECTOR(2*g_DATA_SIZE-1 downto 0);
+    signal sig_add_res                                : STD_LOGIC_VECTOR(g_DATA_SIZE downto 0);
+    signal sig_mul_res_reg_en, sig_add_res_reg_en     : std_logic;       
 
 begin
 
@@ -71,12 +75,28 @@ begin
       in_reg_d       => sig_mul_res_reg_d,
       out_reg_q      => mul_res
     );
-      --adder
-    sig_add_res <= std_logic_vector(unsigned(sig_fr1_reg_q) + unsigned(sig_fr2_reg_q));
-    sig_add_res_reg_d <= sig_add_res(g_DATA_SIZE-1 downto 0);
-      --multiplier
-    sig_mul_res <= std_logic_vector(signed(sig_fr1_reg_q) * signed(sig_fr2_reg_q));
-    sig_mul_res_reg_d <= sig_mul_res(g_DATA_SIZE-1 downto 0);
+    --adder
+    process (sig_add_res)
+    begin
+      sig_add_res_reg_d <= sig_add_res(g_DATA_SIZE-1 downto 0);
+      
+      
+      -- underflow detection
+      if sig_fr1_reg_q(g_DATA_SIZE-1)='1' and sig_fr2_reg_q(g_DATA_SIZE-1)='1' and sig_add_res(g_DATA_SIZE-1)='0' then
+        sig_add_res_reg_d <= c_MIN_VAL;
+      end if;
+      -- overflow detection
+      if sig_fr1_reg_q(g_DATA_SIZE-1)='0' and sig_fr2_reg_q(g_DATA_SIZE-1)='0' and sig_add_res(g_DATA_SIZE-1)='1' then
+        sig_add_res_reg_d <= c_MAX_VAL;
+      end if;
+
+    end process;
+    --ADDER
+    sig_add_res <= std_logic_vector(resize(signed(sig_fr1_reg_q), g_DATA_SIZE+1) 
+                                  + resize(signed(sig_fr2_reg_q), g_DATA_SIZE+1));
+    --multiplier
+    --sig_mul_res <= std_logic_vector(signed(sig_fr1_reg_q) * signed(sig_fr2_reg_q));
+    --sig_mul_res_reg_d <= sig_mul_res(g_DATA_SIZE-1 downto 0);
 
     
                   
