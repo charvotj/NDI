@@ -14,8 +14,8 @@ package tb_verification is
     -- TYPES
 
     type packet is record
-        firstFrame : INTEGER;
-        secondFrame : INTEGER;
+        firstFrame : real;
+        secondFrame : real;
     end record;
 
     type SPI_bus_t is record
@@ -53,12 +53,12 @@ package tb_verification is
 
     
     -- FUNCTIONS
-    function int_to_vec (number : in integer;
+    function real_to_vec (number : in real;
                          length : in natural
     ) return std_logic_vector;
 
-    function vec_to_int (vector : in std_logic_vector
-    ) return integer;
+    function vec_to_real (vector : in std_logic_vector
+    ) return real;
     
 
 end tb_verification;
@@ -123,12 +123,12 @@ package body tb_verification is
             begin
                 wait until rising_edge(SPI_bus.SCLK);
                 wait for 0.25 * c_SCLK_PERIOD;
-                send_frame(SPI_bus,int_to_vec(data_in.firstFrame, bit_size),fr1_vec);
+                send_frame(SPI_bus,real_to_vec(data_in.firstFrame, bit_size),fr1_vec);
                 wait for delay;
-                send_frame(SPI_bus,int_to_vec(data_in.secondFrame, bit_size), fr2_vec);
+                send_frame(SPI_bus,real_to_vec(data_in.secondFrame, bit_size), fr2_vec);
 
-                data_out.firstFrame := vec_to_int(fr1_vec);
-                data_out.secondFrame := vec_to_int(fr2_vec);
+                data_out.firstFrame := vec_to_real(fr1_vec);
+                data_out.secondFrame := vec_to_real(fr2_vec);
 
             end procedure;
 
@@ -136,19 +136,19 @@ package body tb_verification is
     
 
     --Trosku useless, ale nevadí c-: uz se napsala...
-    function int_to_vec (number : in integer;
+    function real_to_vec (number : in real;
                         length  : in natural
     ) return std_logic_vector is
     begin
-        return std_logic_vector(to_signed(number,length));
+        return std_logic_vector(to_signed(integer(number * 2.0 ** 2),length));
     end function;
 
     --Trosku useless, ale nevadí c-: uz se napsala...
-    function vec_to_int (vector : in std_logic_vector
-    ) return integer is
+    function vec_to_real (vector : in std_logic_vector
+    ) return real is
     begin
-        report "DEBUG: vec_to_int func:" & to_string(unsigned(vector));
-        return to_integer(signed(vector));
+        report "DEBUG: vec_to_real func:" & to_string(unsigned(vector));
+        return real(to_integer(signed(vector)))/ 2.0 **2;
     end function;
 
 end tb_verification;

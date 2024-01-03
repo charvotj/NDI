@@ -68,15 +68,15 @@ BEGIN
       SPI_bus.CS_b <= '1';
       wait for c_SCLK_PERIOD*4; -- wait to see falling edge of CS
       
-      pckt_zero.firstFrame := 0;
-      pckt_zero.secondFrame := 0;
+      pckt_zero.firstFrame := 0.0;
+      pckt_zero.secondFrame := 0.0;
       
       ------------------------------------
       -------- TEST SEQUENCE BEGIN -------
       ------------------------------------
       -- send first packet
-      pckt_in.firstFrame := -5;
-      pckt_in.secondFrame := -6;
+      pckt_in.firstFrame := 1.125;
+      pckt_in.secondFrame := -0.5;
       send_packet(SPI_bus,pckt_in,pckt_out, 1*c_SCLK_PERIOD);
       -- get result
       wait for 2* c_SCLK_PERIOD;
@@ -106,3 +106,67 @@ BEGIN
    end process;
 
 END;
+
+
+
+-- library IEEE;
+-- use IEEE.STD_LOGIC_1164.ALL;
+-- use IEEE.NUMERIC_STD.ALL;
+
+-- entity RealToFixedPoint is
+-- end RealToFixedPoint;
+
+-- architecture Behavioral of RealToFixedPoint is
+--     -- Example: 16-bit fixed point, 8 bits for integer, 8 bits for fractional part
+--     constant Integer_Bits: integer := 8;
+--     constant Fractional_Bits: integer := 8;
+--     constant Scale_Factor: real := 2.0 ** Fractional_Bits;
+--     signal Real_Value: real := -123.456;  -- Example real value
+--     signal Fixed_Point_Value: signed(Integer_Bits + Fractional_Bits - 1 downto 0);
+-- begin
+--     process(Real_Value)
+--     begin
+--         -- Scale and convert to integer
+--         -- Note: Rounding can be added as required
+--         if Real_Value < 0.0 then
+--             -- Negative number: scale, convert, and take two's complement
+--             Fixed_Point_Value <= to_signed(-1 * integer(round(Scale_Factor * Real_Value)), Integer_Bits + Fractional_Bits);
+--         else
+--             -- Positive number: scale and convert
+--             Fixed_Point_Value <= to_signed(integer(round(Scale_Factor * Real_Value)), Integer_Bits + Fractional_Bits);
+--         end if;
+--     end process;
+-- end Behavioral;
+
+
+-- library IEEE;
+-- use IEEE.STD_LOGIC_1164.ALL;
+-- use IEEE.NUMERIC_STD.ALL;
+
+-- -- Function to convert real to 8-bit fixed point
+-- function real_to_fixed8(value: real) return std_logic_vector is
+--     constant fractional_bits : integer := 4;
+--     constant scale_factor : real := 2.0 ** fractional_bits;  -- 2^4 for 4 fractional bits
+--     variable scaled_value : real;
+--     variable integer_value : integer;
+-- begin
+--     -- Scale and round the real value
+--     scaled_value := value * scale_factor;
+
+--     -- Convert to integer (with rounding)
+--     if scaled_value >= 0.0 then
+--         integer_value := integer(scaled_value + 0.5);  -- Rounding
+--     else
+--         integer_value := integer(scaled_value - 0.5);  -- Rounding
+--     end if;
+
+--     -- Handle negative values for two's complement
+--     if integer_value < 0 then
+--         return std_logic_vector(to_unsigned(256 + integer_value, 8));  -- 256 is 2^8, to offset the negative value
+--     else
+--         return std_logic_vector(to_unsigned(integer_value, 8));
+--     end if;
+-- end function;
+
+-- -- Example usage in an architecture or testbench
+-- -- fixed_value <= real_to_fixed8(my_real_input);
