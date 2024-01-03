@@ -38,6 +38,12 @@ package tb_verification is
     --                       data_len : in natural;
     --                       data : in natural;
     --                       r_edge : in std_logic);
+    procedure assert_numbers(signal SPI_bus : inout SPI_bus_t;
+                             firstInput            : in real;
+                             secondInput           : in real;
+                             correctAdition        : in real;
+                             correctMultiplication : in real);
+
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
                          data_in        : in std_logic_vector;
@@ -82,6 +88,46 @@ package body tb_verification is
     --         serial_out <= data_vector(i);
     --         end loop;
     -- end procedure send_serial;
+
+    procedure assert_numbers(signal SPI_bus : inout SPI_bus_t;
+                            firstInput            : in real;
+                            secondInput           : in real;
+                            correctAdition        : in real;
+                            correctMultiplication : in real)
+        is
+            variable pckt_in, pckt_out, pckt_zero : packet;
+        begin
+            pckt_zero.firstFrame := 0.0;
+            pckt_zero.secondFrame := 0.0;
+            
+            ------------------------------------
+            -------- TEST SEQUENCE BEGIN -------
+            ------------------------------------
+            -- send first packet
+            pckt_in.firstFrame := firstInput;
+            pckt_in.secondFrame := secondInput;
+            send_packet(SPI_bus,pckt_in,pckt_out, 1*c_SCLK_PERIOD);
+            -- get result
+            wait for 2* c_SCLK_PERIOD;
+            send_packet(SPI_bus,pckt_zero,pckt_out, 1*c_SCLK_PERIOD);
+            -- report
+            report "pckt_in.firstFrame:";
+            report to_string((pckt_in.firstFrame));
+            report "pckt_in.secondFrame:";
+            report to_string((pckt_in.secondFrame));
+            
+            report "pckt_out.firstFrame:";
+            report to_string((pckt_out.firstFrame));
+            report "pckt_out.secondFrame:";
+            report to_string((pckt_out.secondFrame));
+
+            -- assert sumation
+            assert pckt_out.firstFrame = correctAdition -- nerovna se assert
+                report "Addition result was: " & to_string(pckt_out.firstFrame) & ", Should be: " & to_string(correctAdition) severity warning;
+            -- assert multiplication
+            assert pckt_out.secondFrame = correctMultiplication -- nerovna se assert
+                report "Multiplication result was: " & to_string(pckt_out.secondFrame) & ", Should be: " & to_string(correctMultiplication) severity warning;
+        end procedure;
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
                          data_in : in std_logic_vector;
@@ -140,7 +186,7 @@ package body tb_verification is
                         length  : in natural
     ) return std_logic_vector is
     begin
-        return std_logic_vector(to_signed(integer(number * 2.0 ** 2),length));
+        return std_logic_vector(to_signed(integer(number * 2.0 ** (length/2)),length));
     end function;
 
     --Trosku useless, ale nevadí c-: uz se napsala...
@@ -148,7 +194,7 @@ package body tb_verification is
     ) return real is
     begin
         report "DEBUG: vec_to_real func:" & to_string(unsigned(vector));
-        return real(to_integer(signed(vector)))/ 2.0 **2;
+        return real(to_integer(signed(vector)))/ 2.0 ** (vector'length/2);
     end function;
 
 end tb_verification;
