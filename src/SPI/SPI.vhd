@@ -68,7 +68,7 @@ begin
     port map (
         data => data_in,
         load_en => load_data,
-        shift_en => ser_shift_en ,
+        shift_en => ser_shift_en,
         rst => '0',
         clk => clk,
         stream => MISO

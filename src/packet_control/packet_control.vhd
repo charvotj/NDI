@@ -90,7 +90,7 @@ begin
                     if(fr_error = '0') then
                         next_state <= await_fr2;
                         we_data_fr1 <= '1'; -- propagujeme data dale
-                    else  --error💀
+                    else  --error
                         next_state <= await_fr1;
                     end if;
                 end if;

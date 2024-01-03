@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 
 entity arith_unit is
     Generic(
-	g_DATA_SIZE : natural := 2
+	g_DATA_SIZE : natural := 4
 	);
     Port ( clk      : in  STD_LOGIC; -- crystal clock
            we_data_fr1 : in  STD_LOGIC;
@@ -91,16 +91,33 @@ begin
       end if;
 
     end process;
+
+    --multiplier
+    process (sig_mul_res)
+    begin
+      sig_mul_res_reg_d <= sig_mul_res((15*g_DATA_SIZE/10)-1 downto 5*g_DATA_SIZE/10); --sheeesh💀
+      
+      
+      -- underflow detection
+      if sig_fr1_reg_q(g_DATA_SIZE-1) /= sig_fr2_reg_q(g_DATA_SIZE-1) and sig_mul_res((15*g_DATA_SIZE/10)-1)='0' then
+        sig_mul_res_reg_d <= c_MIN_VAL;
+      end if;
+      -- overflow detection
+      if sig_fr1_reg_q(g_DATA_SIZE-1) = sig_fr2_reg_q(g_DATA_SIZE-1) and (sig_mul_res((15*g_DATA_SIZE/10)-1)='1' or sig_mul_res((15*g_DATA_SIZE/10))='1') then
+        sig_mul_res_reg_d <= c_MAX_VAL;
+      end if;
+
+    end process;
     --ADDER
     sig_add_res <= std_logic_vector(resize(signed(sig_fr1_reg_q), g_DATA_SIZE+1) 
                                   + resize(signed(sig_fr2_reg_q), g_DATA_SIZE+1));
     --multiplier
     sig_mul_res <= std_logic_vector(signed(sig_fr1_reg_q) * signed(sig_fr2_reg_q));
-    sig_mul_res_reg_d <= sig_mul_res(g_DATA_SIZE-1 downto 0);
+    
 
 
     -- enable 
-    sig_mul_res_reg_en <= '1'; 
+    sig_mul_res_reg_en <= we_data_fr1; 
     sig_add_res_reg_en <= '1'; 
 
     

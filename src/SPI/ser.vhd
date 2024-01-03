@@ -44,7 +44,8 @@ end ser;
 
 architecture Behavioral of ser is
 
-signal reg_d, reg_q : STD_LOGIC_VECTOR (g_DATA_SIZE-1 downto 0) ;
+-- register is one bit longer to prevent shifting value to early
+signal reg_d, reg_q : STD_LOGIC_VECTOR (g_DATA_SIZE downto 0) ;
 begin
 
 process (clk)
@@ -61,9 +62,9 @@ end process;
 process (load_en, shift_en, reg_q, data)
 begin	
 	if(load_en = '1') then
-		reg_d <= data;
+		reg_d <= data & '0';
 	elsif(shift_en = '1') then
-		reg_d <= '0' & reg_q(g_DATA_SIZE-1 downto 1) ; -- LSB/MSB - care for shift direction
+		reg_d <= '0' & reg_q(g_DATA_SIZE downto 1) ; -- LSB/MSB - care for shift direction
 	else
 		reg_d <= reg_q;
 	end if;

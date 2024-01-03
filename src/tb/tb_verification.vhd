@@ -107,7 +107,8 @@ package body tb_verification is
 
             end loop;
 
-            wait until falling_edge(SPI_bus.SCLK);
+            -- wait until falling_edge(SPI_bus.SCLK);
+            wait for c_SCLK_PERIOD * 0.25;
             SPI_bus.CS_b <= '1';
         end procedure;
 
