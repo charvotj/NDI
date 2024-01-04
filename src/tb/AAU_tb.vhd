@@ -3,7 +3,8 @@ USE ieee.std_logic_1164.ALL;
 use std.env.finish;
 USE ieee.numeric_std.ALL;
 use work.tb_verification.all;
- 
+use std.textio.all; -- Import text I/O library
+
 ENTITY AAU_tb IS
 Generic(
    g_DATA_SIZE : natural := c_DATA_SIZE --<<<<<<<<<<<<<---------------------------------------------------------------------
@@ -11,14 +12,12 @@ Generic(
 END AAU_tb;
  
 ARCHITECTURE behavior OF AAU_tb IS 
-
-    
    --Signals
    signal clk : std_logic := '0';
    signal SPI_bus : SPI_bus_t;
-   
-
-
+   --Files
+   file input_file : text open read_mode is "/home/radek/NDI/src/tb/data_test_8_bit.txt";
+   file output_file : text open write_mode is "output.txt";
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
@@ -61,15 +60,57 @@ BEGIN
 
    -- Stimulus process
    stim_proc: process
-   
-   begin		
+      variable input_line : line;
+      variable output_line : line; 
+      variable firstInput  : real;
+      variable secondInput : real;
+      variable correctAdition : real;
+      variable correctMultiplication   : real;
+      variable temp_char : character;
+      variable my_real : real;
+   begin	
+     
       -- init
       SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
       SPI_bus.CS_b <= '1';
       wait for c_SCLK_PERIOD*4; -- wait to see falling edge of CS
-      
 
-      assert_numbers(SPI_bus,1.0,1.0,2.0,1.0);
+   
+
+      while not endfile(input_file) loop
+         -- Read a line from the input file
+         readline(input_file, input_line );
+         firstInput := real'value(input_line.all);
+         readline(input_file, input_line );
+         secondInput := real'value(input_line.all);
+         readline(input_file, input_line );
+         correctAdition := real'value(input_line.all);
+         readline(input_file, input_line );
+         correctMultiplication := real'value(input_line.all);
+ 
+         assert_numbers(SPI_bus,firstInput, secondInput, correctAdition, correctMultiplication);
+
+         -- hread(input_line, firstInput);
+         -- hread(input_line, temp_char);
+
+         -- hread(input_line, secondInput);
+         -- hread(input_line, temp_char);
+
+         -- hread(input_line, correctAdition);
+         -- hread(input_line, temp_char);
+
+         -- hread(input_line, correctMultiplication);
+         -- hread(input_line, temp_char);
+         -- -- Your existing logic to send packet and get result
+         -- -- ...
+ 
+         -- -- Write results to output file
+         -- write(output_line, pckt_out.firstFrame);
+         -- write(output_line, ' '); -- Space separator
+         -- write(output_line, pckt_out.secondFrame);
+         -- writeline(output_file, output_line);
+     end loop;
+
       
 
       
@@ -143,3 +184,5 @@ END;
 
 -- -- Example usage in an architecture or testbench
 -- -- fixed_value <= real_to_fixed8(my_real_input);
+
+

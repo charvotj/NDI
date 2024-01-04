@@ -95,15 +95,24 @@ begin
     --multiplier
     process (sig_mul_res)
     begin
-      sig_mul_res_reg_d <= sig_mul_res((15*g_DATA_SIZE/10)-1 downto 5*g_DATA_SIZE/10); --sheeesh💀
+      sig_mul_res_reg_d <= sig_mul_res((15*g_DATA_SIZE/10)-1 downto 5*g_DATA_SIZE/10); 
       
       
-      -- underflow detection
-      if sig_fr1_reg_q(g_DATA_SIZE-1) /= sig_fr2_reg_q(g_DATA_SIZE-1) and sig_mul_res((15*g_DATA_SIZE/10)-1)='0' then
+      -- -- underflow detection
+      -- if sig_fr1_reg_q(g_DATA_SIZE-1) /= sig_fr2_reg_q(g_DATA_SIZE-1) and sig_mul_res((15*g_DATA_SIZE/10)-1)='0' and unsigned(sig_mul_res) /= 0 then
+      --   sig_mul_res_reg_d <= c_MIN_VAL;
+      -- end if;
+      -- -- overflow detection
+      -- if sig_fr1_reg_q(g_DATA_SIZE-1) = sig_fr2_reg_q(g_DATA_SIZE-1) and (sig_mul_res((15*g_DATA_SIZE/10)-1)='1' or sig_mul_res((15*g_DATA_SIZE/10))='1') then
+      --   sig_mul_res_reg_d <= c_MAX_VAL;
+      -- end if;
+
+       -- underflow detection
+      if (sig_fr1_reg_q(g_DATA_SIZE-1) /= sig_fr2_reg_q(g_DATA_SIZE-1)) and (sig_mul_res(2*g_DATA_SIZE-1 downto (15*g_DATA_SIZE/10)-1) /= ((g_DATA_SIZE/2) downto 0 =>'1')) and (sig_mul_res(2*g_DATA_SIZE-1 downto (15*g_DATA_SIZE/10)-1) /= ((g_DATA_SIZE/2) downto 0 =>'0')) then --sheeesh💀
         sig_mul_res_reg_d <= c_MIN_VAL;
       end if;
       -- overflow detection
-      if sig_fr1_reg_q(g_DATA_SIZE-1) = sig_fr2_reg_q(g_DATA_SIZE-1) and (sig_mul_res((15*g_DATA_SIZE/10)-1)='1' or sig_mul_res((15*g_DATA_SIZE/10))='1') then
+      if (sig_fr1_reg_q(g_DATA_SIZE-1) = sig_fr2_reg_q(g_DATA_SIZE-1)) and (unsigned(sig_mul_res(2*g_DATA_SIZE-1 downto (15*g_DATA_SIZE/10)-1)) > 0) then
         sig_mul_res_reg_d <= c_MAX_VAL;
       end if;
 

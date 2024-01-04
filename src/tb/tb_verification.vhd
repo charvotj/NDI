@@ -6,7 +6,7 @@ USE ieee.numeric_std.ALL;
 
 package tb_verification is
     -- CONSTANTS
-    constant c_DATA_SIZE : natural := 4;
+    constant c_DATA_SIZE : natural := 8;
     constant c_CLK_PERIOD_NS : natural := 20;
     constant c_CLK_PERIOD : time := time(c_CLK_PERIOD_NS * 1 ns);
     constant c_SCLK_PERIOD : time := 20 us;
@@ -111,22 +111,22 @@ package body tb_verification is
             wait for 2* c_SCLK_PERIOD;
             send_packet(SPI_bus,pckt_zero,pckt_out, 1*c_SCLK_PERIOD);
             -- report
-            report "pckt_in.firstFrame:";
-            report to_string((pckt_in.firstFrame));
-            report "pckt_in.secondFrame:";
-            report to_string((pckt_in.secondFrame));
+            -- report "pckt_in.firstFrame:";
+            -- report to_string((pckt_in.firstFrame));
+            -- report "pckt_in.secondFrame:";
+            -- report to_string((pckt_in.secondFrame));
             
-            report "pckt_out.firstFrame:";
-            report to_string((pckt_out.firstFrame));
-            report "pckt_out.secondFrame:";
-            report to_string((pckt_out.secondFrame));
+            -- report "pckt_out.firstFrame:";
+            -- report to_string((pckt_out.firstFrame));
+            -- report "pckt_out.secondFrame:";
+            -- report to_string((pckt_out.secondFrame));
 
             -- assert sumation
-            assert pckt_out.firstFrame = correctAdition -- nerovna se assert
-                report "Addition result was: " & to_string(pckt_out.firstFrame) & ", Should be: " & to_string(correctAdition) severity warning;
+            assert to_string(pckt_out.firstFrame,4) = to_string(correctAdition,4) -- nerovna se assert
+                report "For numbers " & to_string(pckt_in.firstFrame,4) & " and " & to_string(pckt_in.secondFrame,4) & " addition result was: " & to_string(pckt_out.firstFrame,4) & ", Should be: " & to_string(correctAdition,4) severity warning;
             -- assert multiplication
-            assert pckt_out.secondFrame = correctMultiplication -- nerovna se assert
-                report "Multiplication result was: " & to_string(pckt_out.secondFrame) & ", Should be: " & to_string(correctMultiplication) severity warning;
+            assert to_string(pckt_out.secondFrame,4) = to_string(correctMultiplication,4) -- nerovna se assert
+                report "For numbers " & to_string(pckt_in.firstFrame,4) & " and " & to_string(pckt_in.secondFrame,4) & " multiplication result was: " & to_string(pckt_out.secondFrame,4) & ", Should be: " & to_string(correctMultiplication,4) severity warning;
         end procedure;
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
@@ -149,7 +149,7 @@ package body tb_verification is
                 --cteni
                 wait until rising_edge(SPI_bus.SCLK);
                 data_out(i) := SPI_bus.MISO;
-                report "MISO:" & to_string(SPI_bus.MISO);
+                -- report "MISO:" & to_string(SPI_bus.MISO);
 
             end loop;
 
@@ -193,7 +193,7 @@ package body tb_verification is
     function vec_to_real (vector : in std_logic_vector
     ) return real is
     begin
-        report "DEBUG: vec_to_real func:" & to_string(unsigned(vector));
+        -- report "DEBUG: vec_to_real func:" & to_string(unsigned(vector));
         return real(to_integer(signed(vector)))/ 2.0 ** (vector'length/2);
     end function;
 
