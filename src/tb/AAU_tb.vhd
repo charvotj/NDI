@@ -16,7 +16,7 @@ ARCHITECTURE behavior OF AAU_tb IS
    signal clk : std_logic := '0';
    signal SPI_bus : SPI_bus_t;
    --Files
-   file input_file : text open read_mode is "/home/radek/NDI/src/tb/data_test_8_bit.txt";
+   file input_file : text open read_mode is "/home/radek/NDI/src/tb/data_test_4_bit.txt";
    file output_file : text open write_mode is "output.txt";
 BEGIN
  

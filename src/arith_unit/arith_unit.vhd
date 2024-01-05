@@ -76,7 +76,7 @@ begin
       out_reg_q      => mul_res
     );
     --adder
-    process (sig_add_res)
+    process (sig_add_res, sig_fr1_reg_q, sig_fr2_reg_q)
     begin
       sig_add_res_reg_d <= sig_add_res(g_DATA_SIZE-1 downto 0);
       
@@ -93,7 +93,7 @@ begin
     end process;
 
     --multiplier
-    process (sig_mul_res)
+    process (sig_mul_res, sig_fr1_reg_q, sig_fr2_reg_q)
     begin
       sig_mul_res_reg_d <= sig_mul_res((15*g_DATA_SIZE/10)-1 downto 5*g_DATA_SIZE/10); 
       

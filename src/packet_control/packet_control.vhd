@@ -64,7 +64,7 @@ begin
     end process;
 
     -- Next State Logic
-    process(fr_start,fr_end,timer_flag,fr_error,current_state)
+    process(fr_start,fr_end,timer_flag,fr_error,current_state, add_res, mul_res)
     begin
         next_state <= current_state; -- default
         

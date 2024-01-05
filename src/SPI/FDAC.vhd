@@ -19,7 +19,6 @@ end FDAC;
 
 architecture Behavioral of FDAC is
     signal cnt_d, cnt_q : unsigned(integer(ceil(log2(real(g_DATA_SIZE)))) downto 0) := (others => '0');
-    signal fr_error_s : STD_LOGIC :='0';
 begin
 
     fr_start <= CS_b_fe;  
@@ -38,10 +37,8 @@ begin
     end process;
   
     cnt_d <= cnt_q + 1;
-    
-    fr_error_s <= '1' when cnt_q /= g_DATA_SIZE else '0';
-    fr_error <= fr_error_s;
-    
+    fr_error <= '1' when cnt_q /= g_DATA_SIZE else '0';
+        
 end architecture;
 
 --------------------------------------------------------------------------------------------

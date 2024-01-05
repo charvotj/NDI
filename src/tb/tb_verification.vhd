@@ -6,7 +6,7 @@ USE ieee.numeric_std.ALL;
 
 package tb_verification is
     -- CONSTANTS
-    constant c_DATA_SIZE : natural := 8;
+    constant c_DATA_SIZE : natural := 4;
     constant c_CLK_PERIOD_NS : natural := 20;
     constant c_CLK_PERIOD : time := time(c_CLK_PERIOD_NS * 1 ns);
     constant c_SCLK_PERIOD : time := 20 us;
