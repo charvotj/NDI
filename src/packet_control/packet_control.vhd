@@ -19,7 +19,6 @@ entity packet_control is
            fr_start : in  STD_LOGIC;
            fr_end   : in  STD_LOGIC;
            fr_error : in  STD_LOGIC;
-           data_in : in  STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
 
            add_res : in  STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
            mul_res : in  STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
