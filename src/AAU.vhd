@@ -4,7 +4,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity AAU is
     Generic(
-            g_DATA_SIZE : natural := 2;
+            g_DATA_SIZE : natural := 16;
             g_CLK_PERIOD_NS : natural := 20
         );
 
