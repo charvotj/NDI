@@ -3,10 +3,11 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+use std.textio.all; -- Import text I/O library
 
 package tb_verification is
     -- CONSTANTS
-    constant c_DATA_SIZE : natural := 4;
+    constant c_DATA_SIZE : natural := 16;
     constant c_CLK_PERIOD_NS : natural := 20;
     constant c_CLK_PERIOD : time := time(c_CLK_PERIOD_NS * 1 ns);
     constant c_SCLK_PERIOD : time := 20 us;
@@ -39,10 +40,13 @@ package tb_verification is
     --                       data : in natural;
     --                       r_edge : in std_logic);
     procedure assert_numbers(signal SPI_bus : inout SPI_bus_t;
-                             firstInput            : in real;
-                             secondInput           : in real;
-                             correctAdition        : in real;
-                             correctMultiplication : in real);
+                             firstInput             : in real;
+                             secondInput            : in real;
+                             correctAdition         : in real;
+                             correctMultiplication  : in real;
+                             correctMultiplicationNoFloor : in real;
+                             REQ_name               : in string;
+                             outFileName            : in string);
 
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
@@ -89,13 +93,18 @@ package body tb_verification is
     --         end loop;
     -- end procedure send_serial;
 
-    procedure assert_numbers(signal SPI_bus : inout SPI_bus_t;
-                            firstInput            : in real;
-                            secondInput           : in real;
-                            correctAdition        : in real;
-                            correctMultiplication : in real)
+    procedure assert_numbers(signal SPI_bus              : inout SPI_bus_t;
+                            firstInput                   : in real;
+                            secondInput                  : in real;
+                            correctAdition               : in real;
+                            correctMultiplication        : in real;
+                            correctMultiplicationNoFloor : in real;
+                            REQ_name                     : in string;
+                            outFileName                  : in string)
         is
-            variable pckt_in, pckt_out, pckt_zero : packet;
+            variable pckt_in, pckt_out, pckt_zero : packet; 
+            variable line_var : line;
+            file output_file : text open APPEND_MODE is outFileName;
         begin
             pckt_zero.firstFrame := 0.0;
             pckt_zero.secondFrame := 0.0;
@@ -114,8 +123,36 @@ package body tb_verification is
             -- report "pckt_in.firstFrame:";
             -- report to_string((pckt_in.firstFrame));
             -- report "pckt_in.secondFrame:";
-            -- report to_string((pckt_in.secondFrame));
-            
+            case REQ_name is
+                when "REQ_AAU_F_011" =>
+                    report "------------------";
+                    report REQ_name & ":";
+                
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & ":");
+                    writeline(output_file, line_var);
+                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ",No floor: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                when "REQ_AAU_F_012" =>
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & ":");
+                    writeline(output_file, line_var);
+                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ",No floor: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                when others =>
+                    -- Handle undefined action
+            end case;
+
             -- report "pckt_out.firstFrame:";
             -- report to_string((pckt_out.firstFrame));
             -- report "pckt_out.secondFrame:";
@@ -123,7 +160,7 @@ package body tb_verification is
 
             -- assert sumation
             assert to_string(pckt_out.firstFrame,4) = to_string(correctAdition,4) -- nerovna se assert
-                report "For numbers " & to_string(pckt_in.firstFrame,4) & " and " & to_string(pckt_in.secondFrame,4) & " addition result was: " & to_string(pckt_out.firstFrame,4) & ", Should be: " & to_string(correctAdition,4) severity warning;
+                report "For numbers:" & to_string(pckt_in.firstFrame,4) & " and " & to_string(pckt_in.secondFrame,4) & " addition result was: " & to_string(pckt_out.firstFrame,4) & ", Should be: " & to_string(correctAdition,4) severity warning;
             -- assert multiplication
             assert to_string(pckt_out.secondFrame,4) = to_string(correctMultiplication,4) -- nerovna se assert
                 report "For numbers " & to_string(pckt_in.firstFrame,4) & " and " & to_string(pckt_in.secondFrame,4) & " multiplication result was: " & to_string(pckt_out.secondFrame,4) & ", Should be: " & to_string(correctMultiplication,4) severity warning;

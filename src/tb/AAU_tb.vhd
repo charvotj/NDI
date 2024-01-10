@@ -16,8 +16,7 @@ ARCHITECTURE behavior OF AAU_tb IS
    signal clk : std_logic := '0';
    signal SPI_bus : SPI_bus_t;
    --Files
-   file input_file : text open read_mode is "/home/radek/NDI/src/tb/data_test_4_bit.txt";
-   file output_file : text open write_mode is "output.txt";
+   file input_file : text open read_mode is "/home/radek/NDI/src/tb/number_format_test.txt";
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
@@ -60,25 +59,29 @@ BEGIN
 
    -- Stimulus process
    stim_proc: process
-      variable input_line : line;
-      variable output_line : line; 
-      variable firstInput  : real;
-      variable secondInput : real;
-      variable correctAdition : real;
-      variable correctMultiplication   : real;
-      variable temp_char : character;
-      variable my_real : real;
+      variable input_line                    : line;
+      variable output_line                   : line; 
+      variable firstInput                    : real;
+      variable secondInput                   : real;
+      variable correctAdition                : real;
+      variable correctMultiplication         : real;
+      variable correctMultiplicationNoFloor  : real;
+      variable temp_char                     : character;
+      variable my_real                       : real;
+      variable req_name                      : string(1 to 13) := "NOT_REQ_TEST_";
+      variable out_file_name                 : string(1 to 35) := "/home/radek/NDI/src/tb/log_file.txt";
+      file output_file : text open WRITE_MODE is out_file_name;
    begin	
-     
       -- init
       SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
       SPI_bus.CS_b <= '1';
       wait for c_SCLK_PERIOD*4; -- wait to see falling edge of CS
 
-   
 
       while not endfile(input_file) loop
          -- Read a line from the input file
+         readline(input_file, input_line );
+         req_name := input_line.all;
          readline(input_file, input_line );
          firstInput := real'value(input_line.all);
          readline(input_file, input_line );
@@ -87,8 +90,10 @@ BEGIN
          correctAdition := real'value(input_line.all);
          readline(input_file, input_line );
          correctMultiplication := real'value(input_line.all);
- 
-         assert_numbers(SPI_bus,firstInput, secondInput, correctAdition, correctMultiplication);
+         readline(input_file, input_line );
+         correctMultiplicationNoFloor := real'value(input_line.all);
+
+         assert_numbers(SPI_bus,firstInput, secondInput, correctAdition, correctMultiplication, correctMultiplicationNoFloor, req_name, out_file_name);
 
          -- hread(input_line, firstInput);
          -- hread(input_line, temp_char);
@@ -109,6 +114,7 @@ BEGIN
          -- write(output_line, ' '); -- Space separator
          -- write(output_line, pckt_out.secondFrame);
          -- writeline(output_file, output_line);
+         file_close(output_file);
      end loop;
 
       
