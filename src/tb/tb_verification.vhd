@@ -46,7 +46,10 @@ package tb_verification is
                              correctMultiplication  : in real;
                              correctMultiplicationNoFloor : in real;
                              REQ_name               : in string;
-                             outFileName            : in string);
+                             outFileName            : in string;
+                             delay                        : in time := c_SCLK_PERIOD;
+                             bit_size                     : in natural := c_DATA_SIZE
+                             );
 
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
@@ -75,24 +78,6 @@ end tb_verification;
 
 package body tb_verification is
     
-    -- procedure send_serial(signal clk : in std_logic;
-    --                       signal serial_out : out std_logic;
-    --                       data_len : in natural;
-    --                       data : in  natural;
-    --                       r_edge : in std_logic) -- '1': rising edge, '0': falling edge
-    --     is
-    --         variable data_vector : std_logic_vector(data_len-1 downto 0) := std_logic_vector(to_unsigned(data,data_len));
-    --     begin
-    --         for i in 0 to data_len-1 loop
-    --         if (r_edge = '1') then
-    --         wait until rising_edge(clk);
-    --         else
-    --         wait until falling_edge(clk);
-    --         end if;
-    --         serial_out <= data_vector(i);
-    --         end loop;
-    -- end procedure send_serial;
-
     procedure assert_numbers(signal SPI_bus              : inout SPI_bus_t;
                             firstInput                   : in real;
                             secondInput                  : in real;
@@ -100,7 +85,10 @@ package body tb_verification is
                             correctMultiplication        : in real;
                             correctMultiplicationNoFloor : in real;
                             REQ_name                     : in string;
-                            outFileName                  : in string)
+                            outFileName                  : in string;
+                            delay                        : in time := c_SCLK_PERIOD;
+                            bit_size                     : in natural := c_DATA_SIZE
+                            )
         is
             variable pckt_in, pckt_out, pckt_zero : packet; 
             variable line_var : line;
@@ -115,19 +103,17 @@ package body tb_verification is
             -- send first packet
             pckt_in.firstFrame := firstInput;
             pckt_in.secondFrame := secondInput;
-            send_packet(SPI_bus,pckt_in,pckt_out, 1*c_SCLK_PERIOD);
+            send_packet(SPI_bus,pckt_in,pckt_out, delay, bit_size);
             -- get result
             wait for 2* c_SCLK_PERIOD;
-            send_packet(SPI_bus,pckt_zero,pckt_out, 1*c_SCLK_PERIOD);
+            send_packet(SPI_bus,pckt_zero,pckt_out, delay, bit_size);
             -- report
             -- report "pckt_in.firstFrame:";
             -- report to_string((pckt_in.firstFrame));
             -- report "pckt_in.secondFrame:";
             case REQ_name is
+                -- FUNCTIONAL REQUIREMENTS
                 when "REQ_AAU_F_011" =>
-                    report "------------------";
-                    report REQ_name & ":";
-                
                     write(line_var, string'("---------------"));
                     writeline(output_file, line_var);
                     write(line_var, REQ_name & ":");
@@ -136,8 +122,17 @@ package body tb_verification is
                     writeline(output_file, line_var);
                     write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ",No floor: " & to_string(correctMultiplicationNoFloor,8));
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
                     writeline(output_file, line_var);
+                    if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
+                        write(line_var, string'("PASSED"));
+                    else
+                        write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING' 
+                    end if;
+                    writeline(output_file, line_var);
+                    write(line_var, string'("For requirements verificaton please see output waveform file.")); --HATE THIS SO MUCH sTrING' 
+                    writeline(output_file, line_var);
+
                 when "REQ_AAU_F_012" =>
                     write(line_var, string'("---------------"));
                     writeline(output_file, line_var);
@@ -147,10 +142,58 @@ package body tb_verification is
                     writeline(output_file, line_var);
                     write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ",No floor: " & to_string(correctMultiplicationNoFloor,8));
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                    if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
+                        write(line_var, string'("PASSED"));
+                    else
+                        write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING' 
+                    end if;
+                    
+                    writeline(output_file, line_var);
+                when "REQ_AAU_F_013" =>
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & ":");
+                    writeline(output_file, line_var);
+                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                    if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
+                        write(line_var, string'("PASSED"));
+                    else
+                        write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING'  
+                    end if;
+                    writeline(output_file, line_var);
+
+                -- INTERFACE REQUIREMENTS
+                when "REQ_AAU_I_021" =>
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & ":");
+                    writeline(output_file, line_var);
+                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                    if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
+                        write(line_var, string'("PASSED"));
+                    else
+                        write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING' 
+                    end if;
+                    writeline(output_file, line_var);
+                    write(line_var, string'("For requirements verificaton please see output waveform file.")); --HATE THIS SO MUCH sTrING' 
                     writeline(output_file, line_var);
                 when others =>
-                    -- Handle undefined action
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & ": Undefined requirement");
+                    writeline(output_file, line_var);
             end case;
 
             -- report "pckt_out.firstFrame:";
@@ -159,11 +202,11 @@ package body tb_verification is
             -- report to_string((pckt_out.secondFrame));
 
             -- assert sumation
-            assert to_string(pckt_out.firstFrame,4) = to_string(correctAdition,4) -- nerovna se assert
-                report "For numbers:" & to_string(pckt_in.firstFrame,4) & " and " & to_string(pckt_in.secondFrame,4) & " addition result was: " & to_string(pckt_out.firstFrame,4) & ", Should be: " & to_string(correctAdition,4) severity warning;
+            assert to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) -- nerovna se assert
+                report "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8) & " addition result was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) severity warning;
             -- assert multiplication
-            assert to_string(pckt_out.secondFrame,4) = to_string(correctMultiplication,4) -- nerovna se assert
-                report "For numbers " & to_string(pckt_in.firstFrame,4) & " and " & to_string(pckt_in.secondFrame,4) & " multiplication result was: " & to_string(pckt_out.secondFrame,4) & ", Should be: " & to_string(correctMultiplication,4) severity warning;
+            assert to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) -- nerovna se assert
+                report "For numbers " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8) & " multiplication result was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) severity warning;
         end procedure;
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
@@ -193,6 +236,7 @@ package body tb_verification is
             -- wait until falling_edge(SPI_bus.SCLK);
             wait for c_SCLK_PERIOD * 0.25;
             SPI_bus.CS_b <= '1';
+            SPI_bus.MOSI <= '0';
         end procedure;
 
 

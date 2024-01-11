@@ -5,10 +5,18 @@ def main():
     # number € <-128, 127.99609375> for n=16
     # Number format
     input_data = [
-        [1.0, 1.0, 'REQ_AAU_F_011'],
-        [2.0, 2.0, 'REQ_AAU_F_012']
+        [15.12109375, -3.50, 'REQ_AAU_I_021'],          # Bit ordering - ALSO REQ_ AAU_I_024
+        [-64.0, 64.0, 'REQ_AAU_F_011'],         # Format of numbers
+        [0.01171875, 0.5, 'REQ_AAU_F_012'],     # Number rounding
+        [0.01171875, -0.5, 'REQ_AAU_F_012'],    # Number rounding
+        [0.01171875, 0.25, 'REQ_AAU_F_012'],    # Number rounding
+        [120.0, 90.0, 'REQ_AAU_F_013'],         # Overflow - Add, Mul overflow
+        [-90.0, -100.0, 'REQ_AAU_F_013'],       # Overflow - Add undeflow, Mull overflow 
+        [-100.125, 1.5, 'REQ_AAU_F_013'],       # Overflow - Mul undeflow
+        [120.0, 2.0, 'REQ_AAU_F_013'],          # Overflow - Mul overflow
     ]
     generate_nbit(16,customDataset=input_data,name='number_format_test')
+
 
 # Function generates data for assertion in VHDL testbench
 # Desired format is fixed point number with decimal point in the middle of the bits
