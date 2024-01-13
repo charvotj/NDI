@@ -1,0 +1,42 @@
+---------------
+REQ_AAU_F_012:
+For numbers:  0.01171875 and 0.50000000
+Add res. was: 0.51171875, Should be: 0.51171875, raw: 0.51171875
+Mul res. was: 0.00390625, Should be: 0.00390625, raw: 0.00585937
+PASSED
+---------------
+REQ_AAU_F_012:
+For numbers:  0.01171875 and -0.50000000
+Add res. was: -0.48828125, Should be: -0.48828125, raw: -0.48828125
+Mul res. was: -0.00781250, Should be: -0.00781250, raw: -0.00585937
+PASSED
+---------------
+REQ_AAU_F_012:
+For numbers:  0.01171875 and 0.25000000
+Add res. was: 0.26171875, Should be: 0.26171875, raw: 0.26171875
+Mul res. was: 0.00000000, Should be: 0.00000000, raw: 0.00292969
+PASSED
+---------------
+REQ_AAU_F_013:
+For numbers:  120.00000000 and 90.00000000
+Add res. was: 127.99609375, Should be: 127.99609375, raw: 210.00000000
+Mul res. was: 127.99609375, Should be: 127.99609375, raw: 10800.00000000
+PASSED
+---------------
+REQ_AAU_F_013:
+For numbers:  -90.00000000 and -100.00000000
+Add res. was: -128.00000000, Should be: -128.00000000, raw: -190.00000000
+Mul res. was: 127.99609375, Should be: 127.99609375, raw: 9000.00000000
+PASSED
+---------------
+REQ_AAU_F_013:
+For numbers:  -100.12500000 and 1.50000000
+Add res. was: -98.62500000, Should be: -98.62500000, raw: -98.62500000
+Mul res. was: -128.00000000, Should be: -128.00000000, raw: -150.18750000
+PASSED
+---------------
+REQ_AAU_F_013:
+For numbers:  120.00000000 and 2.00000000
+Add res. was: 122.00000000, Should be: 122.00000000, raw: 122.00000000
+Mul res. was: 127.99609375, Should be: 127.99609375, raw: 240.00000000
+PASSED

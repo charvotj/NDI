@@ -10,7 +10,7 @@ package tb_verification is
     constant c_DATA_SIZE : natural := 16;
     constant c_CLK_PERIOD_NS : natural := 20;
     constant c_CLK_PERIOD : time := time(c_CLK_PERIOD_NS * 1 ns);
-    constant c_SCLK_PERIOD : time := 20 us;
+    constant c_SCLK_PERIOD : time := 1 us;
 
     -- TYPES
 
@@ -43,6 +43,7 @@ package tb_verification is
                              firstInput             : in real;
                              secondInput            : in real;
                              correctAdition         : in real;
+                             correctAditionNoFloor  : in real;
                              correctMultiplication  : in real;
                              correctMultiplicationNoFloor : in real;
                              REQ_name               : in string;
@@ -83,6 +84,7 @@ package body tb_verification is
                             firstInput                   : in real;
                             secondInput                  : in real;
                             correctAdition               : in real;
+                            correctAditionNoFloor        : in real;
                             correctMultiplication        : in real;
                             correctMultiplicationNoFloor : in real;
                             REQ_name                     : in string;
@@ -119,11 +121,11 @@ package body tb_verification is
                     writeline(output_file, line_var);
                     write(line_var, REQ_name & ":");
                     writeline(output_file, line_var);
-                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
                     writeline(output_file, line_var);
                     if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
                         write(line_var, string'("PASSED"));
@@ -139,11 +141,11 @@ package body tb_verification is
                     writeline(output_file, line_var);
                     write(line_var, REQ_name & ":");
                     writeline(output_file, line_var);
-                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
                     writeline(output_file, line_var);
                     if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
                         write(line_var, string'("PASSED"));
@@ -157,11 +159,11 @@ package body tb_verification is
                     writeline(output_file, line_var);
                     write(line_var, REQ_name & ":");
                     writeline(output_file, line_var);
-                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
                     writeline(output_file, line_var);
                     if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
                         write(line_var, string'("PASSED"));
@@ -176,11 +178,11 @@ package body tb_verification is
                     writeline(output_file, line_var);
                     write(line_var, REQ_name & ":");
                     writeline(output_file, line_var);
-                    write(line_var, "For numbers:" & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8));
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
                     writeline(output_file, line_var);
-                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", no floor: " & to_string(correctMultiplicationNoFloor,8));
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
                     writeline(output_file, line_var);
                     if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
                         write(line_var, string'("PASSED"));

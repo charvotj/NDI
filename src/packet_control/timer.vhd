@@ -20,13 +20,13 @@ architecture Behavioral of Timer is
     signal cnt_d, cnt_q : unsigned(integer(ceil(log2(real(COUNT_TO_NUMBER)))) downto 0) := (others => '0');
 
 begin
-        --TODO Asyn reset vyrešit
     process(clk, reset)
     begin
-        if reset = '1' then
-            cnt_q <= (others => '0');  -- Reset the counter
-            flag <= '0';               -- Lower the flag on reset
-        elsif rising_edge(clk) then
+        if rising_edge(clk) then
+            if reset = '1' then
+                cnt_q <= (others => '0');  -- Reset the counter
+                flag <= '0'; 
+            end if;              -- Lower the flag on reset
             if cnt_q < COUNT_TO_NUMBER then
                 cnt_q <= cnt_d; -- Increment the counter
             else

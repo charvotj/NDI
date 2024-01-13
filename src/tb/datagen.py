@@ -3,10 +3,8 @@ def main():
     generate_nbit(16, 12)
 
     # number € <-128, 127.99609375> for n=16
-    # Number format
-    input_data = [
-        [15.12109375, -3.50, 'REQ_AAU_I_021'],          # Bit ordering - ALSO REQ_ AAU_I_024
-        [-64.0, 64.0, 'REQ_AAU_F_011'],         # Format of numbers
+    # tc_au_001 -Number format
+    tc_au_001 = [
         [0.01171875, 0.5, 'REQ_AAU_F_012'],     # Number rounding
         [0.01171875, -0.5, 'REQ_AAU_F_012'],    # Number rounding
         [0.01171875, 0.25, 'REQ_AAU_F_012'],    # Number rounding
@@ -15,8 +13,12 @@ def main():
         [-100.125, 1.5, 'REQ_AAU_F_013'],       # Overflow - Mul undeflow
         [120.0, 2.0, 'REQ_AAU_F_013'],          # Overflow - Mul overflow
     ]
-    generate_nbit(16,customDataset=input_data,name='number_format_test')
+    generate_nbit(16,customDataset=tc_au_001,name='input-data-tc-au-001')
 
+    # tc_au_001 -Number format
+    tc_au_001 = [
+        [15.12109375, -3.50, 'REQ_AAU_I_021'],          # Bit ordering - ALSO REQ_ AAU_I_024
+    ]
 
 # Function generates data for assertion in VHDL testbench
 # Desired format is fixed point number with decimal point in the middle of the bits
@@ -32,10 +34,10 @@ def generate_nbit(n, nth=0, customDataset=None,name='default'):
             if(i % (2**nth) == 0 or i==(2**n)-1):
                 for j,numB in enumerate(binary_numbers):
                     if(j % (2**nth) == 0 or j==(2**n)-1):
-                        testCases.append(['NOT_REQ_TEST_',numA,numB,sumNums(numA,numB,n),mulNums(numA,numB,n),numA*numA])
+                        testCases.append(['NOT_REQ_TEST_',numA,numB,sumNums(numA,numB,n),mulNums(numA,numB,n),numA+numB,numB*numA])
     else:
         for nums in customDataset:
-                testCases.append([nums[2],nums[0],nums[1],sumNums(nums[0],nums[1],n),mulNums(nums[0],nums[1],n),nums[0]*nums[1]])
+                testCases.append([nums[2],nums[0],nums[1],sumNums(nums[0],nums[1],n),mulNums(nums[0],nums[1],n),nums[0]+nums[1],nums[0]*nums[1]])
 
     fileName = ""
     if(name == 'default'):

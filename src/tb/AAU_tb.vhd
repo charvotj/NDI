@@ -63,6 +63,7 @@ BEGIN
       variable firstInput                    : real;
       variable secondInput                   : real;
       variable correctAdition                : real;
+      variable correctAditionNoFloor         : real;
       variable correctMultiplication         : real;
       variable correctMultiplicationNoFloor  : real;
       variable temp_char                     : character;
@@ -83,8 +84,8 @@ BEGIN
       -------------------------------------------------
       ---------- NUMBER FORMAT TEST -------------------
       -------------------------------------------------
-      file_open(input_file, abs_path & "number_format_test.txt", READ_MODE);
-      file_open(output_file, abs_path & "logs/number_format_test.log", WRITE_MODE);
+      file_open(input_file, abs_path & "input-data-tc-au-001.txt", READ_MODE);
+      file_open(output_file, abs_path & "logs/tc-au-001.log", WRITE_MODE);
       while not endfile(input_file) loop
          -- Read a line from the input file
          readline(input_file, input_line );
@@ -98,9 +99,11 @@ BEGIN
          readline(input_file, input_line );
          correctMultiplication := real'value(input_line.all);
          readline(input_file, input_line );
+         correctAditionNoFloor := real'value(input_line.all);
+         readline(input_file, input_line );
          correctMultiplicationNoFloor := real'value(input_line.all);
 
-         assert_numbers(SPI_bus,firstInput, secondInput, correctAdition, correctMultiplication, correctMultiplicationNoFloor, req_name, abs_path & "logs/number_format_test.log");
+         assert_numbers(SPI_bus,firstInput, secondInput, correctAdition, correctAditionNoFloor, correctMultiplication, correctMultiplicationNoFloor, req_name, abs_path & "logs/tc-au-001.log");
 
       end loop;
       file_close(input_file);
