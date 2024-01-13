@@ -72,7 +72,8 @@ BEGIN
       file output_file                       : text;
       -- Simulation settings -- need to calculate length of the path ... 
       -- retarded definition ... "type STRING is array (POSITIVE range <>) of CHARACTER;"
-      variable abs_path        : string(1 to 23) := "/home/radek/NDI/src/tb/";
+      -- variable abs_path        : string(1 to 23) := "/home/radek/NDI/src/tb/";
+      variable abs_path        : string(1 to 38) := "/home/jakub/Plocha/NDI/Projekt/src/tb/";
    begin	
       -- init
       SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)

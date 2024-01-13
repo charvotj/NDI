@@ -73,6 +73,7 @@ package tb_verification is
     function vec_to_real (vector : in std_logic_vector
     ) return real;
     
+    -- function to_string(r : real; decimal_places : natural) return string;
 
 end tb_verification;
 
@@ -277,5 +278,36 @@ package body tb_verification is
         -- report "DEBUG: vec_to_real func:" & to_string(unsigned(vector));
         return real(to_integer(signed(vector)))/ 2.0 ** (vector'length/2);
     end function;
+
+
+    -- -- TO STRING for VHDL 93
+    -- function to_string(r : real; decimal_places : natural) return string is
+    --     variable integer_part : integer;
+    --     variable fractional_part : real;
+    --     variable result_str : string(1 to 1024) := (others => ' ');
+    --     variable fraction_str : string(1 to 1024) := (others => '0');
+    --     variable i : integer := 1;
+    -- begin
+    --     -- Split the real number into integer and fractional parts
+    --     integer_part := integer(r);
+    --     fractional_part := abs(r - real(integer_part));
+
+    --     -- Convert the integer part to string
+    --     result_str := integer'image(integer(integer_part));
+
+    --     -- Process fractional part
+    --     if decimal_places > 0 then
+    --         result_str := result_str & ".";  -- Add decimal point
+    --         while i <= decimal_places loop
+    --             fractional_part := fractional_part * 10.0;
+    --             fraction_str(i) := integer'image(integer(fractional_part))(1);
+    --             fractional_part := fractional_part - real(integer(fractional_part));
+    --             i := i + 1;
+    --         end loop;
+    --         result_str := result_str & fraction_str(1 to decimal_places);
+    --     end if;
+
+    --     return result_str;
+    -- end to_string;
 
 end tb_verification;
