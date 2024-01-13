@@ -6,6 +6,7 @@ entity SPI is
 	g_DATA_SIZE : natural := 8
 	);
     Port ( clk  : in  STD_LOGIC; -- crystal clock
+           rst  : in STD_LOGIC;
            CS_b : in  STD_LOGIC;
            SCLK : in  STD_LOGIC;
            MOSI : in  STD_LOGIC;
@@ -60,7 +61,7 @@ begin
         data => data_in,
         load_en => load_data,
         shift_en => ser_shift_en,
-        rst => '0',
+        rst => rst,
         clk => clk,
         stream => MISO
     );
@@ -73,7 +74,7 @@ begin
     port map (
         data => data_out,
         shift_en => deser_shift_en,
-        rst => '0',
+        rst => rst,
         clk => clk,
         stream => MOSI_DDF_signal
     );

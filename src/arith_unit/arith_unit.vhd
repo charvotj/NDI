@@ -8,6 +8,7 @@ entity arith_unit is
 	g_DATA_SIZE : natural := 4
 	);
     Port ( clk      : in  STD_LOGIC; -- crystal clock
+           rst      : in STD_LOGIC;
            we_data_fr1 : in  STD_LOGIC;
            we_data_fr2 : in  STD_LOGIC;
            data_in : in  STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
@@ -38,6 +39,7 @@ begin
      )	
     port map (
       clk            => clk,
+      rst            => rst,
       enable_reg     => we_data_fr1,
       in_reg_d       => data_in,
       out_reg_q      => sig_fr1_reg_q
@@ -49,6 +51,7 @@ begin
      )	
     port map (
       clk            => clk,
+      rst            => rst,
       enable_reg     => we_data_fr2,
       in_reg_d       => data_in,
       out_reg_q      => sig_fr2_reg_q
@@ -60,6 +63,7 @@ begin
      )	
     port map (
       clk            => clk,
+      rst            => rst,
       enable_reg     => sig_add_res_reg_en,
       in_reg_d       => sig_add_res_reg_d,
       out_reg_q      => add_res
@@ -71,6 +75,7 @@ begin
      )	
     port map (
       clk            => clk,
+      rst            => rst,
       enable_reg     => sig_mul_res_reg_en,
       in_reg_d       => sig_mul_res_reg_d,
       out_reg_q      => mul_res

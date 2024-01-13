@@ -9,6 +9,7 @@ entity AAU is
         );
 
     Port(  clk  :in STD_LOGIC;
+           rst  : in STD_LOGIC;
            SCLK : in  STD_LOGIC;
            CS_b : in  STD_LOGIC;
            MOSI : in  STD_LOGIC;
@@ -29,6 +30,7 @@ begin
         )	
       PORT MAP (
           clk => clk,
+          rst => rst,
           CS_b => CS_b,
           SCLK => SCLK,
           MOSI => MOSI,
@@ -48,6 +50,7 @@ begin
           )
         Port map ( 
                clk      => clk,
+               rst      => rst,
                fr_start => sig_fr_start,
                fr_end   => sig_fr_end,
                fr_error => sig_fr_error,
@@ -67,6 +70,7 @@ begin
               )
         Port map ( 
                clk      => clk,
+               rst      =>rst,
                we_data_fr1 => sig_load_fr1,
                we_data_fr2 => sig_load_fr2,
                data_in  => sig_spi_data_out,

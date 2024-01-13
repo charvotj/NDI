@@ -14,6 +14,7 @@ END AAU_tb;
 ARCHITECTURE behavior OF AAU_tb IS 
    --Signals
    signal clk : std_logic := '0';
+   signal rst : std_logic := '0';
    signal SPI_bus : SPI_bus_t;
    
 BEGIN
@@ -26,6 +27,7 @@ BEGIN
         )	
       PORT MAP (
          clk  => clk,
+         rst => rst,
          SCLK => SPI_bus.SCLK,
          CS_b => SPI_bus.CS_b,
          MOSI => SPI_bus.MOSI,
@@ -76,18 +78,23 @@ BEGIN
       -- variable abs_path        : string(1 to 23) := "/home/radek/NDI/src/tb/";
       variable abs_path        : string(1 to 38) := "/home/jakub/Plocha/NDI/Projekt/src/tb/";
    begin	
-      -- init
+      -- init environment
       SPI_bus <= c_SPI_bus_Recessive; -- avoid conflict of multiple drivers (from two processes)
       SPI_bus.CS_b <= '1';
       wait for c_SCLK_PERIOD*4; -- wait to see falling edge of CS
 
       -------------------------------------------------
-      ---------- NUMBER FORMAT TEST -------------------
+      ---------- Test Number: tc_au_001 ---------------
       -------------------------------------------------
+      -- RESET DUT
+      rst <= '1';
+      wait for c_SCLK_PERIOD*2;
+      rst <= '0';
+      -- OPEN FILES
       file_open(input_file, abs_path & "input-data-tc-au-001.txt", READ_MODE);
       file_open(output_file, abs_path & "logs/tc-au-001.log", WRITE_MODE);
+      -- LOOP THROW INPUT NUMBERS
       while not endfile(input_file) loop
-         -- Read a line from the input file
          readline(input_file, input_line );
          req_name := input_line.all;
          readline(input_file, input_line );
@@ -102,14 +109,17 @@ BEGIN
          correctAditionNoFloor := real'value(input_line.all);
          readline(input_file, input_line );
          correctMultiplicationNoFloor := real'value(input_line.all);
-
+         -- SEND PACKET, RECEIVE RESPONSE AND ASSERT
          assert_numbers(SPI_bus,firstInput, secondInput, correctAdition, correctAditionNoFloor, correctMultiplication, correctMultiplicationNoFloor, req_name, abs_path & "logs/tc-au-001.log");
-
       end loop;
+      -- CLOSE FILES
       file_close(input_file);
       file_close(output_file);
 
-      wait for c_CLK_PERIOD*10;
+
+
+      -- END TESTING PROCESS
+      wait for c_SCLK_PERIOD*2;
       finish;
    end process;
 

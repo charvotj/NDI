@@ -7,6 +7,7 @@ entity packet_control is
     g_CLK_PERIOD_NS : natural := 20 
 	);
     Port ( clk      : in  STD_LOGIC; -- crystal clock
+           rst      : in  STD_LOGIC;
            fr_start : in  STD_LOGIC;
            fr_end   : in  STD_LOGIC;
            fr_error : in  STD_LOGIC;
@@ -49,7 +50,11 @@ begin
     process(clk)
     begin
         if rising_edge(clk) then
-            current_state <= next_state;
+            if rst = '1' then
+                current_state <= await_fr1;
+            else
+                current_state <= next_state;
+            end if;
         end if;
     end process;
 
