@@ -1,0 +1,79 @@
+%% Creator: Inkscape 1.2.2 (b0a8486541, 2022-12-01), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'img/packet_control_0.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{289.70001221bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.82844323)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{img/packet_control_0.pdf}}%
+    \put(0.38776893,0.71864337){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}await\_fr1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{img/packet_control_0.pdf}}%
+    \put(0.09786539,0.39423055){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}receiving\_fr1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{img/packet_control_0.pdf}}%
+    \put(0.09902982,0.55919791){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}fr\_start = '1'   \end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{img/packet_control_0.pdf}}%
+    \put(0.37512578,0.5799051){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}fr\_end = '1'   \end{tabular}}}}%
+    \put(0.37512578,0.53849071){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}fr\_error = '1'   \end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{img/packet_control_0.pdf}}%
+    \put(0.29113531,0.06981779){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}await\_fr2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{img/packet_control_0.pdf}}%
+    \put(0.27158979,0.25549234){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}fr\_error = '0'   \end{tabular}}}}%
+    \put(0.27158979,0.21407795){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}fr\_end = '1'   \end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{img/packet_control_0.pdf}}%
+    \put(0.51550584,0.29442566){\color[rgb]{0,0,0}\rotatebox{57.032931}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}timer\_flag = '1'   \end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{img/packet_control_0.pdf}}%
+    \put(0.64462699,0.26772388){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}receiving\_fr2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{img/packet_control_0.pdf}}%
+    \put(0.59963814,0.03777212){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}fr\_start = '1'   \end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{img/packet_control_0.pdf}}%
+    \put(0.77697226,0.58230687){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}fr\_end = '1'   \end{tabular}}}}%
+  \end{picture}%
+\endgroup%

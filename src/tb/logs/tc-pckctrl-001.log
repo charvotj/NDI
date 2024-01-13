@@ -1,0 +1,48 @@
+---------------
+REQ_AAU_I_022 for bit size 1=16 and bit size 2=16:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 21.75000000, Should be: 21.75000000, raw: 21.75000000
+Mul res. was: 99.12500000, Should be: 99.12500000, raw: 99.12500000
+PASSED
+---------------
+REQ_AAU_I_022 for bit size 1=8 and bit size 2=8:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 0.00000000, Should be: 0.00000000, raw: 21.75000000
+Mul res. was: 0.00000000, Should be: 0.00000000, raw: 99.12500000
+PASSED
+---------------
+REQ_AAU_I_022 for bit size 1=16 and bit size 2=8:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 0.00000000, Should be: 0.00000000, raw: 21.75000000
+Mul res. was: 0.00000000, Should be: 0.00000000, raw: 99.12500000
+PASSED
+---------------
+REQ_AAU_I_022 for bit size 1=20 and bit size 2=20:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 0.00000000, Should be: 0.00000000, raw: 21.75000000
+Mul res. was: 0.00000000, Should be: 0.00000000, raw: 99.12500000
+PASSED
+---------------
+REQ_AAU_I_022 for bit size 1=16 and bit size 2=20:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 0.00000000, Should be: 0.00000000, raw: 21.75000000
+Mul res. was: 0.00000000, Should be: 0.00000000, raw: 99.12500000
+PASSED
+---------------
+REQ_AAU_I_022 for bit size 1=8 and bit size 2=16:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 0.00000000, Should be: 0.00000000, raw: 21.75000000
+Mul res. was: 15.25000000, Should be: 15.25000000, raw: 99.12500000
+PASSED
+---------------
+REQ_AAU_I_022 for bit size 1=20 and bit size 2=16:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 0.00000000, Should be: 0.00000000, raw: 21.75000000
+Mul res. was: 15.25000000, Should be: 15.25000000, raw: 99.12500000
+PASSED
+---------------
+REQ_AAU_I_023 delay between frames=1200000000000 fs:
+For numbers:  6.50000000 and 15.25000000
+Add res. was: 0.00000000, Should be: 0.00000000, raw: 21.75000000
+Mul res. was: 15.25000000, Should be: 15.25000000, raw: 99.12500000
+PASSED

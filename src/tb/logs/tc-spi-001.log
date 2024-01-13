@@ -1,0 +1,10 @@
+---------------
+REQ_AAU_F_011:
+For numbers:  15.12109375 and -3.50000000
+In binary:  0000111100011111 and 1111110010000000
+Add res. was: 11.62109375, Should be: 11.62109375, raw: 11.62109375
+In binary:  0000101110011111
+Mul res. was: -52.92578125, Should be: -52.92578125, raw: -52.92382812
+In binary:  1100101100010011
+PASSED
+For requirements verificaton please see output waveform file.

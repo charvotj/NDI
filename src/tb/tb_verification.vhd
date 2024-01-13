@@ -48,14 +48,17 @@ package tb_verification is
                              correctMultiplicationNoFloor : in real;
                              REQ_name               : in string;
                              outFileName            : in string;
+                             SCLK_period            : in time := c_SCLK_PERIOD;
                              delay                        : in time := c_SCLK_PERIOD;
-                             bit_size                     : in natural := c_DATA_SIZE
+                             bit_size                     : in natural := c_DATA_SIZE;
+                             bit_size_2                   : in natural := c_DATA_SIZE
                              );
 
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
                          data_in        : in std_logic_vector;
-                         data_out       : out std_logic_vector);
+                         data_out       : out std_logic_vector;
+                         SCLK_period            : in time);
 
    
 
@@ -63,7 +66,9 @@ package tb_verification is
                           data_in          : in packet;
                           variable data_out: out packet;
                           delay            : in time;
-                          bit_size         : in natural := c_DATA_SIZE);
+                          bit_size         : in natural := c_DATA_SIZE;
+                          bit_size_2 : in natural := c_DATA_SIZE;
+                          SCLK_period            : in time);
 
     
     -- FUNCTIONS
@@ -89,8 +94,10 @@ package body tb_verification is
                             correctMultiplicationNoFloor : in real;
                             REQ_name                     : in string;
                             outFileName                  : in string;
+                            SCLK_period                  : in time := c_SCLK_PERIOD;
                             delay                        : in time := c_SCLK_PERIOD;
-                            bit_size                     : in natural := c_DATA_SIZE
+                            bit_size                     : in natural := c_DATA_SIZE;
+                            bit_size_2                   : in natural := c_DATA_SIZE
                             )
         is
             variable pckt_in, pckt_out, pckt_zero : packet; 
@@ -106,10 +113,10 @@ package body tb_verification is
             -- send first packet
             pckt_in.firstFrame := firstInput;
             pckt_in.secondFrame := secondInput;
-            send_packet(SPI_bus,pckt_in,pckt_out, delay, bit_size);
+            send_packet(SPI_bus,pckt_in,pckt_out, delay, bit_size, bit_size_2, SCLK_period);
             -- get result
-            wait for 2* c_SCLK_PERIOD;
-            send_packet(SPI_bus,pckt_zero,pckt_out, delay, bit_size);
+            wait for 2*SCLK_period;
+            send_packet(SPI_bus,pckt_zero,pckt_out, c_SCLK_PERIOD, c_DATA_SIZE, c_DATA_SIZE, SCLK_period);
             -- report
             -- report "pckt_in.firstFrame:";
             -- report to_string((pckt_in.firstFrame));
@@ -123,9 +130,15 @@ package body tb_verification is
                     writeline(output_file, line_var);
                     write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
                     writeline(output_file, line_var);
+                    write(line_var, "In binary:  " & to_string(unsigned(real_to_vec(pckt_in.firstFrame, bit_size))) & " and " & to_string(unsigned(real_to_vec(pckt_in.secondFrame, bit_size))));
+                    writeline(output_file, line_var);
                     write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
                     writeline(output_file, line_var);
+                    write(line_var, "In binary:  " & to_string(unsigned(real_to_vec(pckt_out.firstFrame, bit_size))));
+                    writeline(output_file, line_var);
                     write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "In binary:  " & to_string(unsigned(real_to_vec(pckt_out.secondFrame, bit_size))));
                     writeline(output_file, line_var);
                     if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
                         write(line_var, string'("PASSED"));
@@ -171,6 +184,24 @@ package body tb_verification is
                         write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING'  
                     end if;
                     writeline(output_file, line_var);
+                -- SCLK times REQUIREMENTS
+                when "REQ_AAU_I_020" =>
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & " " & "for SCLK period: " & to_string(SCLK_period) & ":" );
+                    writeline(output_file, line_var);
+                    write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                    if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
+                        write(line_var, string'("PASSED"));
+                    else
+                        write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING' 
+                    end if;
+                    writeline(output_file, line_var);
 
                 -- INTERFACE REQUIREMENTS
                 when "REQ_AAU_I_021" =>
@@ -191,6 +222,44 @@ package body tb_verification is
                     end if;
                     writeline(output_file, line_var);
                     write(line_var, string'("For requirements verificaton please see output waveform file.")); --HATE THIS SO MUCH sTrING' 
+                    writeline(output_file, line_var);
+
+                when "REQ_AAU_I_022" =>
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & " for bit size 1=" & to_string(bit_size) & " and bit size 2=" & to_string(bit_size_2) & ":");
+                    writeline(output_file, line_var);
+                    write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                    if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
+                        write(line_var, string'("PASSED"));
+                    else
+                        write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING' 
+                    end if;
+                    
+                    writeline(output_file, line_var);
+
+                when "REQ_AAU_I_023" =>
+                    write(line_var, string'("---------------"));
+                    writeline(output_file, line_var);
+                    write(line_var, REQ_name & " delay between frames=" & to_string(delay)& ":");
+                    writeline(output_file, line_var);
+                    write(line_var, "For numbers:  " & to_string(pckt_in.firstFrame,8) & " and " & to_string(pckt_in.secondFrame,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Add res. was: " & to_string(pckt_out.firstFrame,8) & ", Should be: " & to_string(correctAdition,8) & ", raw: " & to_string(correctAditionNoFloor,8));
+                    writeline(output_file, line_var);
+                    write(line_var, "Mul res. was: " & to_string(pckt_out.secondFrame,8) & ", Should be: " & to_string(correctMultiplication,8) & ", raw: " & to_string(correctMultiplicationNoFloor,8));
+                    writeline(output_file, line_var);
+                    if to_string(pckt_out.firstFrame,8) = to_string(correctAdition,8) and to_string(pckt_out.secondFrame,8) = to_string(correctMultiplication,8) then
+                        write(line_var, string'("PASSED"));
+                    else
+                        write(line_var, string'("FAILED")); --HATE THIS SO MUCH sTrING' 
+                    end if;
+                    
                     writeline(output_file, line_var);
                 when others =>
                     write(line_var, string'("---------------"));
@@ -214,7 +283,8 @@ package body tb_verification is
 
     procedure send_frame(signal SPI_bus : inout SPI_bus_t;
                          data_in : in std_logic_vector;
-                         data_out : out std_logic_vector) 
+                         data_out : out std_logic_vector;
+                         SCLK_period : in time) 
         is
         begin
             -- report to log
@@ -237,7 +307,7 @@ package body tb_verification is
             end loop;
 
             -- wait until falling_edge(SPI_bus.SCLK);
-            wait for c_SCLK_PERIOD * 0.25;
+            wait for SCLK_period * 0.25;
             SPI_bus.CS_b <= '1';
             SPI_bus.MOSI <= '0';
         end procedure;
@@ -247,15 +317,18 @@ package body tb_verification is
                           data_in : in packet;
                           variable data_out : out packet;
                           delay: in time;
-                          bit_size : in natural := c_DATA_SIZE)
+                          bit_size : in natural := c_DATA_SIZE;
+                          bit_size_2 : in natural := c_DATA_SIZE;
+                          SCLK_period : in time)
             is
-                variable fr1_vec, fr2_vec : std_logic_vector(bit_size-1 downto 0) := (others => '0');
+                variable fr1_vec : std_logic_vector(bit_size-1 downto 0) := (others => '0');
+                variable fr2_vec : std_logic_vector(bit_size_2-1 downto 0) := (others => '0');
             begin
                 wait until rising_edge(SPI_bus.SCLK);
-                wait for 0.25 * c_SCLK_PERIOD;
-                send_frame(SPI_bus,real_to_vec(data_in.firstFrame, bit_size),fr1_vec);
+                wait for 0.25 * SCLK_period;
+                send_frame(SPI_bus,real_to_vec(data_in.firstFrame, bit_size),fr1_vec,SCLK_period);
                 wait for delay;
-                send_frame(SPI_bus,real_to_vec(data_in.secondFrame, bit_size), fr2_vec);
+                send_frame(SPI_bus,real_to_vec(data_in.secondFrame, bit_size_2), fr2_vec,SCLK_period);
 
                 data_out.firstFrame := vec_to_real(fr1_vec);
                 data_out.secondFrame := vec_to_real(fr2_vec);

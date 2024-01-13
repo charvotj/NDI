@@ -3,7 +3,7 @@ def main():
     generate_nbit(16, 12)
 
     # number € <-128, 127.99609375> for n=16
-    # tc_au_001 -Number format
+    # tc_au_001 - Correct arithmetic operations
     tc_au_001 = [
         [0.01171875, 0.5, 'REQ_AAU_F_012'],     # Number rounding
         [0.01171875, -0.5, 'REQ_AAU_F_012'],    # Number rounding
@@ -15,10 +15,20 @@ def main():
     ]
     generate_nbit(16,customDataset=tc_au_001,name='input-data-tc-au-001')
 
-    # tc_au_001 -Number format
-    tc_au_001 = [
-        [15.12109375, -3.50, 'REQ_AAU_I_021'],          # Bit ordering - ALSO REQ_ AAU_I_024
+    # tc_spi_001 - Packet and frame format
+    tc_spi_001 = [
+        [15.12109375, -3.50, 'REQ_AAU_F_011'],          # sthg
     ]
+    generate_nbit(16,customDataset=tc_spi_001,name='input-data-tc-spi-001')
+   
+
+    # tc_spi_002 - desc
+    tc_spi_002 = [
+        [15.12109375, -3.50, 'REQ_AAU_I_020'],          # Clock freq
+        [100.25, -40.0, 'REQ_AAU_I_020'],          # Clock freq
+        [69.421875, 1.69140625, 'REQ_AAU_I_020'],          # Clock freq
+    ]
+    generate_nbit(16,customDataset=tc_spi_002,name='input-data-tc-spi-002')
 
 # Function generates data for assertion in VHDL testbench
 # Desired format is fixed point number with decimal point in the middle of the bits

@@ -18,7 +18,8 @@ entity packet_control is
            load_data : out  STD_LOGIC;
            we_data_fr1 : out  STD_LOGIC;
            we_data_fr2 : out  STD_LOGIC;
-           data_out : out  STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0)
+           data_out : out  STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
+           arith_rst : out STD_LOGIC
            );
 end packet_control;
 
@@ -69,14 +70,15 @@ begin
         load_data   <= '0';
         timer_reset <= '1';
         data_out    <= add_res; --ad_res on output of a multiplex
+        arith_rst <= '0';
 
         case current_state is
             -- STATE CHANGE
             when await_fr1 =>
                 if(fr_start = '1') then
                     next_state <= receiving_fr1;
-                    data_out <= add_res; -- TODO asi takto
-                    load_data <= '1';    -- TODO asi takto
+                    data_out <= add_res; 
+                    load_data <= '1';    
                 end if;
             when receiving_fr1 =>
                 -- Define transition logic from recieve_fr1
@@ -94,18 +96,21 @@ begin
                 timer_reset <= '0';
                 --we_data_fr1 <= '0';
                 if(timer_flag = '1') then
+                    arith_rst <= '1';
                     next_state <= await_fr1; -- REQ_AAU_I_023, Rev. 1
                 elsif(fr_start = '1') then
                     next_state <= receiving_fr2;
-                    data_out <= mul_res; -- TODO asi takto
-                    load_data <= '1';    -- TODO asi takto
+                    data_out <= mul_res; 
+                    load_data <= '1';    
                 end if;
             -- STATE CHANGE
             when receiving_fr2 =>
-                load_data <= '0'; -- TODO asi takto
+                load_data <= '0'; 
                 if(fr_end = '1') then
                     if(fr_error = '0') then
                         we_data_fr2 <= '1'; -- propagujeme data dale
+                    else
+                        arith_rst <= '1';
                     end if;
                         next_state <= await_fr1;
                 end if;
