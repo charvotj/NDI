@@ -1,0 +1,513 @@
+--------------------------------------------------------------------------------
+Release 14.7 Trace  (nt)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+
+C:\xilinx\14.7\ISE_DS\ISE\bin\nt\unwrapped\trce.exe -intstyle ise -v 3 -s 5 -n
+3 -fastpaths -xml AAU.twx AAU.ncd -o AAU.twr AAU.pcf -ucf AAU.ucf -ucf SPI.ucf
+
+Design file:              AAU.ncd
+Physical constraint file: AAU.pcf
+Device,package,speed:     xc3s200,ft256,-5 (PRODUCTION 1.39 2013-10-13)
+Report level:             verbose report
+
+Environment Variable      Effect 
+--------------------      ------ 
+NONE                      No environment variables were set
+--------------------------------------------------------------------------------
+
+INFO:Timing:3412 - To improve timing, see the Timing Closure User Guide (UG612).
+INFO:Timing:2752 - To get complete path coverage, use the unconstrained paths 
+   option. All paths that are not constrained will be reported in the 
+   unconstrained paths section(s) of the report.
+INFO:Timing:3339 - The clock-to-out numbers in this timing report are based on 
+   a 50 Ohm transmission line loading model.  For the details of this model, 
+   and for more information on accounting for different loading conditions, 
+   please see the device datasheet.
+INFO:Timing:3390 - This architecture does not support a default System Jitter 
+   value, please add SYSTEM_JITTER constraint to the UCF to modify the Clock 
+   Uncertainty calculation.
+INFO:Timing:3389 - This architecture does not support 'Discrete Jitter' and 
+   'Phase Error' calculations, these terms will be zero in the Clock 
+   Uncertainty calculation.  Please make appropriate modification to 
+   SYSTEM_JITTER to account for the unsupported Discrete Jitter and Phase 
+   Error.
+
+================================================================================
+Timing constraint: TS_clk = PERIOD TIMEGRP "clk" 50 MHz HIGH 50%;
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 16427 paths analyzed, 476 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 setup errors, 0 hold errors, 0 component switching limit errors)
+ Minimum period is  11.528ns.
+--------------------------------------------------------------------------------
+
+Paths for end point Arith_unit/Data_mul_res_reg/reg_q_2 (SLICE_X36Y23.G1), 468 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     8.472ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr1_reg/reg_q_13 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_2 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.526ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.002ns (0.380 - 0.382)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr1_reg/reg_q_13 to Arith_unit/Data_mul_res_reg/reg_q_2
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X33Y30.XQ      Tcko                  0.626   Arith_unit/Data_fr1_reg/reg_q<13>
+                                                       Arith_unit/Data_fr1_reg/reg_q_13
+    MULT18X18_X1Y3.A13   net (fanout=2)        2.087   Arith_unit/Data_fr1_reg/reg_q<13>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.G1      net (fanout=16)       1.177   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.CLK     Tgck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<3>
+                                                       Arith_unit/sig_mul_res_reg_d<2>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_2
+    -------------------------------------------------  ---------------------------
+    Total                                     11.526ns (5.974ns logic, 5.552ns route)
+                                                       (51.8% logic, 48.2% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     8.610ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr2_reg/reg_q_5 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_2 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.387ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.003ns (0.380 - 0.383)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr2_reg/reg_q_5 to Arith_unit/Data_mul_res_reg/reg_q_2
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X36Y25.XQ      Tcko                  0.626   Arith_unit/Data_fr2_reg/reg_q<5>
+                                                       Arith_unit/Data_fr2_reg/reg_q_5
+    MULT18X18_X1Y3.B5    net (fanout=2)        1.948   Arith_unit/Data_fr2_reg/reg_q<5>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.G1      net (fanout=16)       1.177   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.CLK     Tgck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<3>
+                                                       Arith_unit/sig_mul_res_reg_d<2>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_2
+    -------------------------------------------------  ---------------------------
+    Total                                     11.387ns (5.974ns logic, 5.413ns route)
+                                                       (52.5% logic, 47.5% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     8.862ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr2_reg/reg_q_4 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_2 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.135ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.003ns (0.380 - 0.383)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr2_reg/reg_q_4 to Arith_unit/Data_mul_res_reg/reg_q_2
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X36Y25.YQ      Tcko                  0.626   Arith_unit/Data_fr2_reg/reg_q<5>
+                                                       Arith_unit/Data_fr2_reg/reg_q_4
+    MULT18X18_X1Y3.B4    net (fanout=2)        1.696   Arith_unit/Data_fr2_reg/reg_q<4>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.G1      net (fanout=16)       1.177   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.CLK     Tgck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<3>
+                                                       Arith_unit/sig_mul_res_reg_d<2>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_2
+    -------------------------------------------------  ---------------------------
+    Total                                     11.135ns (5.974ns logic, 5.161ns route)
+                                                       (53.7% logic, 46.3% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point Arith_unit/Data_mul_res_reg/reg_q_3 (SLICE_X36Y23.F1), 468 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     8.485ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr1_reg/reg_q_13 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_3 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.513ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.002ns (0.380 - 0.382)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr1_reg/reg_q_13 to Arith_unit/Data_mul_res_reg/reg_q_3
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X33Y30.XQ      Tcko                  0.626   Arith_unit/Data_fr1_reg/reg_q<13>
+                                                       Arith_unit/Data_fr1_reg/reg_q_13
+    MULT18X18_X1Y3.A13   net (fanout=2)        2.087   Arith_unit/Data_fr1_reg/reg_q<13>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.F1      net (fanout=16)       1.164   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.CLK     Tfck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<3>
+                                                       Arith_unit/sig_mul_res_reg_d<3>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_3
+    -------------------------------------------------  ---------------------------
+    Total                                     11.513ns (5.974ns logic, 5.539ns route)
+                                                       (51.9% logic, 48.1% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     8.623ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr2_reg/reg_q_5 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_3 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.374ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.003ns (0.380 - 0.383)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr2_reg/reg_q_5 to Arith_unit/Data_mul_res_reg/reg_q_3
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X36Y25.XQ      Tcko                  0.626   Arith_unit/Data_fr2_reg/reg_q<5>
+                                                       Arith_unit/Data_fr2_reg/reg_q_5
+    MULT18X18_X1Y3.B5    net (fanout=2)        1.948   Arith_unit/Data_fr2_reg/reg_q<5>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.F1      net (fanout=16)       1.164   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.CLK     Tfck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<3>
+                                                       Arith_unit/sig_mul_res_reg_d<3>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_3
+    -------------------------------------------------  ---------------------------
+    Total                                     11.374ns (5.974ns logic, 5.400ns route)
+                                                       (52.5% logic, 47.5% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     8.875ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr2_reg/reg_q_4 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_3 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.122ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.003ns (0.380 - 0.383)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr2_reg/reg_q_4 to Arith_unit/Data_mul_res_reg/reg_q_3
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X36Y25.YQ      Tcko                  0.626   Arith_unit/Data_fr2_reg/reg_q<5>
+                                                       Arith_unit/Data_fr2_reg/reg_q_4
+    MULT18X18_X1Y3.B4    net (fanout=2)        1.696   Arith_unit/Data_fr2_reg/reg_q<4>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.F1      net (fanout=16)       1.164   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X36Y23.CLK     Tfck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<3>
+                                                       Arith_unit/sig_mul_res_reg_d<3>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_3
+    -------------------------------------------------  ---------------------------
+    Total                                     11.122ns (5.974ns logic, 5.148ns route)
+                                                       (53.7% logic, 46.3% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point Arith_unit/Data_mul_res_reg/reg_q_4 (SLICE_X38Y26.G4), 468 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     8.497ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr1_reg/reg_q_13 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_4 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.501ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.002ns (0.123 - 0.125)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr1_reg/reg_q_13 to Arith_unit/Data_mul_res_reg/reg_q_4
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X33Y30.XQ      Tcko                  0.626   Arith_unit/Data_fr1_reg/reg_q<13>
+                                                       Arith_unit/Data_fr1_reg/reg_q_13
+    MULT18X18_X1Y3.A13   net (fanout=2)        2.087   Arith_unit/Data_fr1_reg/reg_q<13>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X38Y26.G4      net (fanout=16)       1.152   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X38Y26.CLK     Tgck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<5>
+                                                       Arith_unit/sig_mul_res_reg_d<4>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_4
+    -------------------------------------------------  ---------------------------
+    Total                                     11.501ns (5.974ns logic, 5.527ns route)
+                                                       (51.9% logic, 48.1% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     8.635ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr2_reg/reg_q_5 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_4 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.362ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.003ns (0.123 - 0.126)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr2_reg/reg_q_5 to Arith_unit/Data_mul_res_reg/reg_q_4
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X36Y25.XQ      Tcko                  0.626   Arith_unit/Data_fr2_reg/reg_q<5>
+                                                       Arith_unit/Data_fr2_reg/reg_q_5
+    MULT18X18_X1Y3.B5    net (fanout=2)        1.948   Arith_unit/Data_fr2_reg/reg_q<5>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X38Y26.G4      net (fanout=16)       1.152   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X38Y26.CLK     Tgck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<5>
+                                                       Arith_unit/sig_mul_res_reg_d<4>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_4
+    -------------------------------------------------  ---------------------------
+    Total                                     11.362ns (5.974ns logic, 5.388ns route)
+                                                       (52.6% logic, 47.4% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     8.887ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               Arith_unit/Data_fr2_reg/reg_q_4 (FF)
+  Destination:          Arith_unit/Data_mul_res_reg/reg_q_4 (FF)
+  Requirement:          20.000ns
+  Data Path Delay:      11.110ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.003ns (0.123 - 0.126)
+  Source Clock:         clk_BUFGP rising at 0.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: Arith_unit/Data_fr2_reg/reg_q_4 to Arith_unit/Data_mul_res_reg/reg_q_4
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X36Y25.YQ      Tcko                  0.626   Arith_unit/Data_fr2_reg/reg_q<5>
+                                                       Arith_unit/Data_fr2_reg/reg_q_4
+    MULT18X18_X1Y3.B4    net (fanout=2)        1.696   Arith_unit/Data_fr2_reg/reg_q<4>
+    MULT18X18_X1Y3.P24   Tmult                 3.790   Arith_unit/Mmult_sig_mul_res
+                                                       Arith_unit/Mmult_sig_mul_res
+    SLICE_X37Y31.G2      net (fanout=2)        1.806   Arith_unit/sig_mul_res<24>
+    SLICE_X37Y31.Y       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and00004
+                                                       Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.F1      net (fanout=1)        0.482   Arith_unit/sig_mul_res_reg_d_and000121
+    SLICE_X37Y30.X       Tilo                  0.479   Arith_unit/sig_mul_res_reg_d_and000182
+                                                       Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X38Y26.G4      net (fanout=16)       1.152   Arith_unit/sig_mul_res_reg_d_and000182
+    SLICE_X38Y26.CLK     Tgck                  0.600   Arith_unit/Data_mul_res_reg/reg_q<5>
+                                                       Arith_unit/sig_mul_res_reg_d<4>1
+                                                       Arith_unit/Data_mul_res_reg/reg_q_4
+    -------------------------------------------------  ---------------------------
+    Total                                     11.110ns (5.974ns logic, 5.136ns route)
+                                                       (53.8% logic, 46.2% route)
+
+--------------------------------------------------------------------------------
+
+Hold Paths: TS_clk = PERIOD TIMEGRP "clk" 50 MHz HIGH 50%;
+--------------------------------------------------------------------------------
+
+Paths for end point SPI/Frame_check/cnt_q_0 (SLICE_X24Y28.BX), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      0.719ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               SPI/Frame_check/cnt_q_0 (FF)
+  Destination:          SPI/Frame_check/cnt_q_0 (FF)
+  Requirement:          0.000ns
+  Data Path Delay:      0.719ns (Levels of Logic = 0)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk_BUFGP rising at 20.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: SPI/Frame_check/cnt_q_0 to SPI/Frame_check/cnt_q_0
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X24Y28.XQ      Tcko                  0.501   SPI/Frame_check/cnt_q<0>
+                                                       SPI/Frame_check/cnt_q_0
+    SLICE_X24Y28.BX      net (fanout=7)        0.464   SPI/Frame_check/cnt_q<0>
+    SLICE_X24Y28.CLK     Tckdi       (-Th)     0.246   SPI/Frame_check/cnt_q<0>
+                                                       SPI/Frame_check/cnt_q_0
+    -------------------------------------------------  ---------------------------
+    Total                                      0.719ns (0.255ns logic, 0.464ns route)
+                                                       (35.5% logic, 64.5% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point Arith_unit/Data_fr1_reg/reg_q_1 (SLICE_X34Y20.BX), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      0.721ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               SPI/Deserializer/reg_q_14 (FF)
+  Destination:          Arith_unit/Data_fr1_reg/reg_q_1 (FF)
+  Requirement:          0.000ns
+  Data Path Delay:      0.721ns (Levels of Logic = 0)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk_BUFGP rising at 20.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: SPI/Deserializer/reg_q_14 to Arith_unit/Data_fr1_reg/reg_q_1
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X35Y20.YQ      Tcko                  0.501   SPI/Deserializer/reg_q<15>
+                                                       SPI/Deserializer/reg_q_14
+    SLICE_X34Y20.BX      net (fanout=3)        0.466   SPI/Deserializer/reg_q<14>
+    SLICE_X34Y20.CLK     Tckdi       (-Th)     0.246   Arith_unit/Data_fr1_reg/reg_q<1>
+                                                       Arith_unit/Data_fr1_reg/reg_q_1
+    -------------------------------------------------  ---------------------------
+    Total                                      0.721ns (0.255ns logic, 0.466ns route)
+                                                       (35.4% logic, 64.6% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point Arith_unit/Data_fr1_reg/reg_q_13 (SLICE_X33Y30.BX), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      0.721ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               SPI/Deserializer/reg_q_2 (FF)
+  Destination:          Arith_unit/Data_fr1_reg/reg_q_13 (FF)
+  Requirement:          0.000ns
+  Data Path Delay:      0.721ns (Levels of Logic = 0)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk_BUFGP rising at 20.000ns
+  Destination Clock:    clk_BUFGP rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: SPI/Deserializer/reg_q_2 to Arith_unit/Data_fr1_reg/reg_q_13
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X32Y31.YQ      Tcko                  0.501   SPI/Deserializer/reg_q<3>
+                                                       SPI/Deserializer/reg_q_2
+    SLICE_X33Y30.BX      net (fanout=3)        0.466   SPI/Deserializer/reg_q<2>
+    SLICE_X33Y30.CLK     Tckdi       (-Th)     0.246   Arith_unit/Data_fr1_reg/reg_q<13>
+                                                       Arith_unit/Data_fr1_reg/reg_q_13
+    -------------------------------------------------  ---------------------------
+    Total                                      0.721ns (0.255ns logic, 0.466ns route)
+                                                       (35.4% logic, 64.6% route)
+
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: TS_clk = PERIOD TIMEGRP "clk" 50 MHz HIGH 50%;
+--------------------------------------------------------------------------------
+Slack: 18.316ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 20.000ns
+  Low pulse: 10.000ns
+  Low pulse limit: 0.842ns (Twpl)
+  Physical resource: SPI/SCLK_DDF/reg_q2/CLK
+  Logical resource: SPI/SCLK_DDF/Mshreg_reg_q2/SRL16E/WS
+  Location pin: SLICE_X24Y39.CLK
+  Clock network: clk_BUFGP
+--------------------------------------------------------------------------------
+Slack: 18.316ns (period - (min high pulse limit / (high pulse / period)))
+  Period: 20.000ns
+  High pulse: 10.000ns
+  High pulse limit: 0.842ns (Twph)
+  Physical resource: SPI/SCLK_DDF/reg_q2/CLK
+  Logical resource: SPI/SCLK_DDF/Mshreg_reg_q2/SRL16E/WS
+  Location pin: SLICE_X24Y39.CLK
+  Clock network: clk_BUFGP
+--------------------------------------------------------------------------------
+Slack: 18.316ns (period - min period limit)
+  Period: 20.000ns
+  Min period limit: 1.684ns (593.824MHz) (Tcp)
+  Physical resource: SPI/SCLK_DDF/reg_q2/CLK
+  Logical resource: SPI/SCLK_DDF/Mshreg_reg_q2/SRL16E/WS
+  Location pin: SLICE_X24Y39.CLK
+  Clock network: clk_BUFGP
+--------------------------------------------------------------------------------
+
+
+All constraints were met.
+
+
+Data Sheet report:
+-----------------
+All values displayed in nanoseconds (ns)
+
+Clock to Setup on destination clock clk
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+clk            |   11.528|         |         |         |
+---------------+---------+---------+---------+---------+
+
+
+Timing summary:
+---------------
+
+Timing errors: 0  Score: 0  (Setup/Max: 0, Hold: 0)
+
+Constraints cover 16427 paths, 0 nets, and 676 connections
+
+Design statistics:
+   Minimum period:  11.528ns{1}   (Maximum frequency:  86.745MHz)
+
+
+------------------------------------Footnotes-----------------------------------
+1)  The minimum period statistic assumes all single cycle delays.
+
+Analysis completed Sun Jan 14 17:20:29 2024 
+--------------------------------------------------------------------------------
+
+Trace Settings:
+-------------------------
+Trace Settings 
+
+Peak Memory Usage: 75 MB
+
+
+
