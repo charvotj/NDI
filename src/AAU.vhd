@@ -23,7 +23,7 @@ architecture Behavioral of AAU is
     ------------------------------
     signal sig_load_data, sig_fr_start, sig_fr_end, sig_fr_error, sig_load_fr1, sig_load_fr2 : std_logic;
     signal sig_spi_data_in, sig_spi_data_out, sig_add_res, sig_mul_res : STD_LOGIC_VECTOR(g_DATA_SIZE-1 downto 0);
-    signal sig_arith_rst : std_logic;
+    signal sig_pktctrl_rst_arith, sig_arith_rst : std_logic;
 begin
     SPI: entity work.SPI(Behavioral)
       generic map (
@@ -63,7 +63,7 @@ begin
                we_data_fr1 => sig_load_fr1,
                we_data_fr2 => sig_load_fr2,
                data_out => sig_spi_data_in,
-               arith_rst => sig_arith_rst
+               arith_rst => sig_pktctrl_rst_arith
                );
 
     Arith_unit: entity work.arith_unit(Behavioral)
@@ -72,7 +72,7 @@ begin
               )
         Port map ( 
                clk      => clk,
-               rst      =>rst or sig_arith_rst,
+               rst      => sig_arith_rst,
                we_data_fr1 => sig_load_fr1,
                we_data_fr2 => sig_load_fr2,
                data_in  => sig_spi_data_out,
@@ -81,5 +81,5 @@ begin
                mul_res => sig_mul_res
                );
 
-              -- arith_rst <= rst or sig_arith_rst
+              sig_arith_rst <= rst or sig_pktctrl_rst_arith;
 end architecture;
